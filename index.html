@@ -245,14 +245,52 @@ select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid 
 @media (prefers-reduced-motion:reduce){.hero2 .sl.on img,svg.shop *{animation:none!important}.hero2 .sl{transition:none}}
 @media (max-width:860px){.hero{grid-template-columns:1fr}}
 @media (max-width:560px){.md{grid-template-columns:1fr}.md img{width:100%;height:200px}.kpis{grid-template-columns:1fr}}
+/* portada */
+body.intro .top,body.intro main{display:none}
+#portada{position:relative;min-height:100svh;width:100%;color:#fff;background:#0b1424;overflow:hidden;display:flex}
+#portada[hidden]{display:none}
+#portada .pslides,#portada .pshade{position:absolute;inset:0}
+#portada .ps{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.4s ease;transform:scale(1.12)}
+#portada .ps.on{opacity:1;animation:pkb 9s ease-out both}
+@keyframes pkb{from{transform:scale(1.14) translate(1.5%,1%)}to{transform:scale(1.02) translate(0,0)}}
+#portada .pshade{background:linear-gradient(180deg,rgba(8,14,26,.72) 0%,rgba(8,14,26,.25) 30%,rgba(8,14,26,.35) 55%,rgba(8,14,26,.92) 100%)}
+#portada .pin{position:relative;z-index:2;display:flex;flex-direction:column;gap:22px;width:100%;box-sizing:border-box;min-width:0;padding-block:18px 26px;min-height:100svh}
+#portada .ptop{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between}
+#portada .brand small{color:#d3dceb}
+.pnav{display:flex;gap:4px;flex-wrap:wrap}
+.pnav a{color:#eef3fa;text-decoration:none;font-weight:600;font-size:14px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.1);backdrop-filter:blur(6px)}
+.pnav a:hover{background:#fff;color:#132743}
+#portada .pmid{margin-block:auto;text-align:center;display:grid;justify-items:center;gap:10px}
+.pkick{font-size:clamp(12px,1.4vw,16px);letter-spacing:.22em;text-transform:uppercase;color:#f6c66a;font-weight:700}
+.ptitle{font-family:var(--f-display);font-weight:800;font-size:clamp(46px,11.5vw,170px);line-height:.92;letter-spacing:.02em;margin:0;text-shadow:0 6px 40px rgba(0,0,0,.45);white-space:nowrap}
+.ptitle span{display:inline-block;animation:pup .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pup{from{opacity:0;transform:translateY(40px) rotate(4deg)}}
+.psub{font-size:clamp(16px,2.2vw,26px);margin:0;font-weight:500;min-height:1.4em}
+.psub span{display:inline-block}.psub span.in{animation:pfade .5s ease both}
+@keyframes pfade{from{opacity:0;transform:translateY(8px)}}
+.pver{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.pfases{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pf{position:relative;display:flex;flex-direction:column;gap:4px;text-decoration:none;color:#fff;padding:16px 16px 14px;border-radius:14px;background:rgba(12,22,40,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);transition:transform .25s,background .25s,border-color .25s;animation:pfade .7s ease both}
+.pf:hover,.pf.hi,.pf:focus-visible{transform:translateY(-6px);background:rgba(200,144,46,.9);border-color:#f6c66a}
+.pfn{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#f6c66a}.pf:hover .pfn,.pf.hi .pfn{color:#2a1a00}
+.pfn em{font-style:normal;opacity:.85;margin-left:4px}
+.pf b{font-family:var(--f-display);font-size:clamp(20px,2vw,26px);line-height:1.1}
+.pfd{font-size:13px;line-height:1.4;opacity:.88}
+.pft{font-size:clamp(18px,1.8vw,24px);font-weight:700;margin-top:6px}
+.pfgo{font-size:13px;font-weight:600;opacity:.9}
+.pftot{background:rgba(255,255,255,.12)}
+.pcap{font-size:11px;color:#c6d0df;text-align:right;min-height:1.2em}
+@media (max-width:900px){.pfases{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.pfases{grid-template-columns:1fr}.pfd{display:none}.ptitle{font-size:12.4vw;letter-spacing:0}.pkick{letter-spacing:.12em}.pnav a{font-size:13px;padding:6px 10px}}
+@media (prefers-reduced-motion:reduce){#portada .ps.on,.ptitle span,.pf{animation:none!important}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <header class="top">
   <div class="wrap">
-    <div class="brand"><div class="logo" aria-hidden="true">P</div><div><b>Red MAN Pinocchio</b><small>Presupuesto por fases</small></div></div>
+    <a class="brand" href="#inicio" style="color:inherit;text-decoration:none"><div class="logo" aria-hidden="true">P</div><div><b>Red MAN Pinocchio</b><small>Presupuesto por fases</small></div></a>
     <nav class="tabs" id="tabs" aria-label="Secciones">
-      <a href="#resumen">Resumen</a><a href="#fase-1">Fase 1</a><a href="#fase-2">Fase 2</a><a href="#fase-3">Fase 3</a><a href="#sedes-3d">Sedes 3D</a>
+      <a href="#inicio">Inicio</a><a href="#resumen">Resumen</a><a href="#fase-1">Fase 1</a><a href="#fase-2">Fase 2</a><a href="#fase-3">Fase 3</a><a href="#sedes-3d">Sedes 3D</a>
       <a href="#evaluacion">Evaluación</a><a href="#comparacion">Comparación</a><a href="#cisco">Cisco PT</a><a href="#catalogo">Catálogo</a>
     </nav>
     <div class="ctrls">
@@ -599,14 +637,14 @@ $("#dlg").addEventListener("click",e=>{if(e.target.id==="dlg")e.target.close()})
 /* ---------------- router */
 const VIEWS={"resumen":vResumen,"fase-1":()=>vFase(1),"fase-2":()=>vFase(2),"fase-3":()=>vFase(3),"evaluacion":vEval,"comparacion":vComp,"catalogo":vCat};
 function render(keepFocus){
-  const h=(location.hash||"#resumen").slice(1), isEq=h.startsWith("eq-"), name=isEq?h:(VIEWS[h]?h:"resumen");
+  const h=(location.hash||"#inicio").slice(1), isEq=h.startsWith("eq-"), name=isEq?h:(VIEWS[h]?h:"resumen");
   REG=[];
   document.body.classList.toggle("v-pro",S.v==="pro");
   $("#vb").classList.toggle("on",S.v==="basico"); $("#vp").classList.toggle("on",S.v==="pro");
   $("#cu").classList.toggle("on",S.cur==="usd"); $("#cs").classList.toggle("on",S.cur==="pen");
   document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+name));
   $("#app").innerHTML=`<div class="view">${isEq?vEq(h.slice(3)):VIEWS[name]()}<p class="foot">Precios con IGV al ${D.meta.fecha} · TC S/ ${TC} por US$ (SUNAT) · contingencia 10 % · ítems «EST.» por cotizar. Universidad de Huánuco · Redes y Telecomunicaciones I · 2026.</p></div>`;
-  afterRender(isEq?"eq":name);
+  document.body.classList.toggle("intro",name==="inicio"); portada(name); afterRender(isEq?"eq":name);
   if(keepFocus){const q=$("#q"); if(q){q.focus(); q.setSelectionRange(q.value.length,q.value.length)}}
 }
 window.addEventListener("hashchange",()=>{render();window.scrollTo(0,0)});
@@ -1199,6 +1237,55 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("change",e=>{ if(e.target.id==="devsel"){S.dev=e.target.value; $("#cfgpre").innerHTML=hl(X.cfg[S.ptF][S.dev]); const h=$(".termh b"); if(h) h.textContent=S.dev+"# show running-config"; $(".termh em").textContent=X.cfg[S.ptF][S.dev].split("\n").length+" líneas"; } });
 document.addEventListener("input",e=>{ if(e.target.id==="cq"){ S.cq=e.target.value; const c=X.cfg[S.ptF][S.dev]; $("#cfgpre").innerHTML=hl(c); const q=S.cq.trim().toLowerCase(); $(".termh em").textContent=c.split("\n").length+" líneas"+(q?" · "+c.toLowerCase().split("\n").filter(l=>l.includes(q)).length+" coincidencias":""); const m=$("#cfgpre mark"), pre=$("#cfgpre"); if(m&&pre) pre.scrollTop=m.offsetTop-pre.offsetTop-40; } });
+
+/* ---------- portada a pantalla completa */
+const PFASES=[
+  {F:"F1",n:"Fase 1",y:"2027",t:"Huánuco",d:"Nace la red: planta, tiendas y VPN en Huánuco, Amarilis y Pillco Marca.",ph:["huanuco","amarilis","pillco","huanuco2"]},
+  {F:"F2",n:"Fase 2",y:"2028",t:"Crecimiento",d:"La red se amplía en Huánuco con la misma plantilla, sin detener la operación.",ph:["huanuco2","huanuco"]},
+  {F:"F3",n:"Fase 3",y:"2029–2030",t:"Región central",d:"La VPN llega a Tingo María, Cerro de Pasco y Huancayo.",ph:["tingo","pasco","huancayo","tingo2","huancayo2"]}];
+const PALL=["huanuco","tingo","pasco","huancayo","amarilis","tingo2","huanuco2","huancayo2","pillco"];
+let pState={list:PALL,i:0,t:null,F:null};
+VIEWS.inicio=()=>"";
+function portadaHTML(){
+  const tot=F=>D.ph[S.v].totals[F];
+  return `<div class="pslides">${PALL.map((k,i)=>`<img class="ps${i===0?" on":""}" data-k="${k}" alt="" src="${X.city[k].img}">`).join("")}</div>
+  <div class="pshade"></div>
+  <div class="pin wrap">
+   <div class="ptop"><div class="brand"><div class="logo" aria-hidden="true">P</div><div><b>Red MAN Pinocchio</b><small>Universidad de Huánuco · 2026</small></div></div>
+    <nav class="pnav" aria-label="Menú"><a href="#resumen">Resumen</a><a href="#sedes-3d">Sedes 3D</a><a href="#evaluacion">Evaluación</a><a href="#comparacion">Comparación</a><a href="#cisco">Cisco PT</a><a href="#catalogo">Catálogo</a></nav></div>
+   <div class="pmid">
+    <div class="pkick">Red MAN con VPN · Panadería Pinocchio</div>
+    <h1 class="ptitle" aria-label="Presupuesto">${[..."PRESUPUESTO"].map((c,i)=>`<span style="animation-delay:${i*45}ms">${c}</span>`).join("")}</h1>
+    <p class="psub" aria-live="polite"><span id="psub">Una red que crece por fases</span></p>
+    <div class="pver"><div class="seg" role="group" aria-label="Versión"><button type="button" data-pv="basico" class="${S.v==="basico"?"on vb":"vb"}">Básico</button><button type="button" data-pv="pro" class="${S.v==="pro"?"on vp":"vp"}">Pro</button></div>
+     <div class="seg" role="group" aria-label="Moneda"><button type="button" data-pc="usd" class="${S.cur==="usd"?"on":""}">US$</button><button type="button" data-pc="pen" class="${S.cur==="pen"?"on":""}">S/</button></div></div>
+   </div>
+   <div class="pfases">${PFASES.map((p,i)=>`<a class="pf" href="#fase-${i+1}" data-pf="${p.F}" style="animation-delay:${500+i*120}ms">
+     <span class="pfn">${p.n} <em>${p.y}</em></span><b>${p.t}</b><span class="pfd">${p.d}</span>
+     <span class="pft num">${money(tot(p.F))}</span><span class="pfgo">Ver presupuesto →</span></a>`).join("")}
+    <a class="pf pftot" href="#resumen" style="animation-delay:860ms"><span class="pfn">Total del proyecto</span><b>3 fases</b><span class="pfd">Inversión acumulada ${S.v==="pro"?"Pro":"Básico"}, con IGV y contingencia.</span>
+     <span class="pft num">${money(tot("F1")+tot("F2")+tot("F3"))}</span><span class="pfgo">Ver resumen →</span></a></div>
+   <div class="pcap" id="pcap"></div>
+  </div>`;
+}
+function pShow(list){ const imgs=[...document.querySelectorAll("#portada .ps")]; if(!imgs.length) return;
+  pState.list=list; const k=list[pState.i%list.length]; imgs.forEach(im=>im.classList.toggle("on",im.dataset.k===k));
+  const c=X.city[k], cap=document.getElementById("pcap"); if(cap) cap.innerHTML=`${esc(c.cap)} · ${esc(c.artist||"Wikimedia Commons")} · ${esc(c.lic)}`; }
+function pTick(){ pState.i++; pShow(pState.list); }
+function pFase(F){ if(pState.F===F) return; pState.F=F; const p=PFASES.find(x=>x.F===F); pState.i=0;
+  pShow(p?p.ph:PALL); const s=document.getElementById("psub"); if(s){ s.classList.remove("in"); void s.offsetWidth; s.textContent=p?`${p.n} · ${p.t} · ${p.y}`:"Una red que crece por fases"; s.classList.add("in"); }
+  document.querySelectorAll("#portada .pf").forEach(a=>a.classList.toggle("hi",a.dataset.pf===F)); }
+function portada(name){
+  let el=document.getElementById("portada");
+  if(name!=="inicio"){ if(el){ el.hidden=true; clearInterval(pState.t); pState.t=null; } return; }
+  if(!el){ el=document.createElement("section"); el.id="portada"; el.setAttribute("aria-label","Portada"); document.body.prepend(el);
+    el.addEventListener("mouseover",e=>{ const a=e.target.closest(".pf[data-pf]"); pFase(a?a.dataset.pf:null); });
+    el.addEventListener("focusin",e=>{ const a=e.target.closest(".pf[data-pf]"); if(a) pFase(a.dataset.pf); });
+    el.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return;
+      if(b.dataset.pv){ S.v=b.dataset.pv; save(); render(); } if(b.dataset.pc){ S.cur=b.dataset.pc; save(); render(); } }); }
+  el.innerHTML=portadaHTML(); el.hidden=false; pState.F=null; pState.i=0; pShow(PALL);
+  clearInterval(pState.t); if(!matchMedia("(prefers-reduced-motion: reduce)").matches) pState.t=setInterval(pTick,4500);
+}
 
 render();
 </script>
