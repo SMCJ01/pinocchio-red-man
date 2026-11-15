@@ -287,6 +287,12 @@ body.intro .top,body.intro main{display:none}
 @media (max-width:520px){.pfases{grid-template-columns:1fr}.pfd{display:none}.ptitle{font-size:12.4vw;letter-spacing:0}.pkick{letter-spacing:.12em}.pnav a{font-size:13px;padding:6px 10px}}
 @media (prefers-reduced-motion:reduce){#portada .ps.on,.ptitle span,.pf{animation:none!important}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.bwctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px 22px;margin-top:6px}
+.bwctl label{display:block;font-size:14px;color:var(--muted)}.bwctl label b{color:var(--ink,inherit);font-family:var(--f-num)}
+.bwctl input[type=range]{width:100%;accent-color:var(--wheat)}
+.bwbar{height:14px;border-radius:99px;background:var(--chip);overflow:hidden;margin:6px 0 2px}.bwbar i{display:block;height:100%;background:var(--good);border-radius:99px;transition:width .25s}
+.bwres{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.bwres .big{font-family:var(--f-num);font-size:26px;font-weight:600}
 </style>
 
 <header class="top">
@@ -294,7 +300,7 @@ body.intro .top,body.intro main{display:none}
     <a class="brand" href="#inicio" style="color:inherit;text-decoration:none"><div class="logo" aria-hidden="true">P</div><div><b>Red MAN Pinocchio</b><small>Presupuesto por fases</small></div></a>
     <nav class="tabs" id="tabs" aria-label="Secciones">
       <a href="#inicio">Inicio</a><a href="#resumen">Resumen</a><a href="#fase-1">Fase 1</a><a href="#fase-2">Fase 2</a><a href="#fase-3">Fase 3</a><a href="#sedes-3d">Sedes 3D</a>
-      <a href="#evaluacion">Evaluación</a><a href="#comparacion">Comparación</a><a href="#cisco">Cisco PT</a><a href="#catalogo">Catálogo</a>
+      <a href="#evaluacion">Evaluación</a><a href="#ancho-de-banda">Ancho de banda</a><a href="#comparacion">Comparación</a><a href="#cisco">Cisco PT</a><a href="#catalogo">Catálogo</a>
     </nav>
     <div class="ctrls">
       <div class="seg" role="group" aria-label="Versión"><button id="vb" class="vb on" type="button">Básico</button><button id="vp" class="vp" type="button">Pro</button></div>
@@ -638,7 +644,53 @@ function openModal(r){
 $("#dlg").addEventListener("click",e=>{if(e.target.id==="dlg")e.target.close()});
 
 /* ---------------- router */
-const VIEWS={"resumen":vResumen,"fase-1":()=>vFase(1),"fase-2":()=>vFase(2),"fase-3":()=>vFase(3),"evaluacion":vEval,"comparacion":vComp,"catalogo":vCat};
+/* ===== Ancho de banda (dimensionamiento WAN por sede) ===== */
+const BW={cli:8,cam:4,adm:3};
+const BWS=[ // [servicio, detalle, Mbps bajada c/u, Mbps subida c/u, cantidad S1, cantidad tienda, clave de barra]
+ ["Caja (tablet con Odoo POS y facturación)","Odoo Online y envío de comprobantes a la PSE/OSE",0.5,0.3,1,1,""],
+ ["Administración (Odoo, correo, web)","Mini PC y usuarios de planta, administración y dueño",2,0.5,3,0,"adm"],
+ ["Wi-Fi de clientes","Límite de 2 Mbps por cliente (regla del firewall)",2,0.5,8,8,"cli"],
+ ["Celulares del personal","Mensajería, pedidos, consultas",1,0.25,6,2,""],
+ ["Cámaras vistas a distancia","Subflujo H.265 de 2 MP, unos 0.5 Mbps por cámara; la grabación queda en el DVR del local",0,0.5,4,4,"cam"],
+ ["Sensores IoT (horno, gas, temperatura)","Mensajes MQTT cada pocos segundos",0.05,0.05,1,0,""],
+ ["Gestión por la VPN","Winbox, registros, respaldos de configuración, Omada",0.2,0.2,1,1,""]];
+const BW_ENC=1.10, BW_CREC=1.30;
+function bwCalc(t){ // t=0 S1, 1 tienda
+  let d=0,u=0; const rows=BWS.map(r=>{let q=t?r[5]:r[4]; if(r[6]==="cli")q=BW.cli; if(r[6]==="cam")q=BW.cam; if(r[6]==="adm"&&!t)q=BW.adm;
+    d+=q*r[2];u+=q*r[3];return [r[0],r[1],q,q*r[2],q*r[3]]});
+  const k=BW_ENC*BW_CREC; return {rows,d,u,D:d*k,U:u*k};
+}
+const m1=x=>x<10?x.toFixed(1):x.toFixed(0);
+function bwTable(t){const c=bwCalc(t);return `<div class="tbl"><table><thead><tr><th>Servicio</th><th class="r">Cant.</th><th class="r">Bajada</th><th class="r">Subida</th></tr></thead><tbody>${c.rows.filter(r=>r[2]>0).map(r=>`<tr><td>${r[0]}<br><small style="color:var(--muted)">${r[1]}</small></td><td class="r">${r[2]}</td><td class="r">${m1(r[3])}</td><td class="r">${m1(r[4])}</td></tr>`).join("")}
+ <tr><td>Suma en la hora más cargada (todo a la vez)</td><td></td><td class="r">${m1(c.d)}</td><td class="r">${m1(c.u)}</td></tr>
+ <tr><td>+10 % por cifrado y protocolos, +30 % de crecimiento</td><td></td><td class="r">×1.43</td><td class="r">×1.43</td></tr>
+ <tr class="tot"><td>Ancho de banda necesario (Mbps)</td><td></td><td class="r">${m1(c.D)}</td><td class="r">${m1(c.U)}</td></tr></tbody></table></div>`}
+function bwRes(t,plan,lbl){const c=bwCalc(t),p=Math.max(c.D,c.U)/plan*100;
+ return `<div class="panel"><div class="eyebrow">${t?"Cada tienda (S2, S3, S4)":"S1, planta"}</div><div class="big">${m1(c.D)} ↓ / ${m1(c.U)} ↑ Mbps</div>
+ <div class="bwbar"><i style="width:${Math.min(100,p).toFixed(1)}%;${p>70?"background:var(--bad)":""}"></i></div>
+ <small>Usa el <b>${p.toFixed(0)} %</b> de ${lbl}. ${p<=70?"Sobra capacidad.":"Conviene subir de plan."}</small></div>`}
+function bwBody(){return `<section class="bwres">${bwRes(0,400,"la fibra de 400 Mbps simétrica")}${bwRes(1,200,"un plan de 200 Mbps")}</section>
+ <section class="grid2"><div class="panel"><h3>S1, planta (Jr. Huallayco)</h3>${bwTable(0)}</div><div class="panel"><h3>Cada tienda (S2, S3, S4)</h3>${bwTable(1)}</div></section>`}
+function vBw(){
+  // respaldo 4G: tráfico esencial (caja, 1 usuario, IoT y gestión; sin Wi-Fi de clientes ni cámaras)
+  const esPico=0.5+2+0.05+0.2, esProm=0.4, gbH=esProm*3600/8/1000, horas=10/gbH;
+  // hub: tráfico que pasa por el VPS (cámaras a pedido + gestión + IoT)
+  const camGB=4*0.5*1800/8/1000*4*30, gesGB=0.25*0.2*2592000/8/1000*4, mesGB=(camGB+gesGB)*2;
+  return `<section><div class="eyebrow">Dimensionamiento</div><h2 style="font-size:clamp(24px,3.2vw,36px);margin-top:6px">¿Alcanza el internet de cada sede?</h2>
+  <p class="lead">Se suma lo que consume cada servicio en la hora más cargada, como si todo ocurriera a la vez (peor caso). Luego se agrega 10 % por cifrado WireGuard y cabeceras, y 30 % de margen de crecimiento. Las cámaras graban en el DVR del propio local: por internet solo viaja lo que alguien mira a distancia.</p>
+  <div class="panel"><h3>Prueba otros supuestos</h3><div class="bwctl">
+   <label>Clientes en el Wi-Fi a la vez: <b id="bwv-cli">${BW.cli}</b><input type="range" min="0" max="30" value="${BW.cli}" data-bw="cli"></label>
+   <label>Cámaras vistas a distancia a la vez: <b id="bwv-cam">${BW.cam}</b><input type="range" min="0" max="4" value="${BW.cam}" data-bw="cam"></label>
+   <label>Usuarios de administración en S1: <b id="bwv-adm">${BW.adm}</b><input type="range" min="1" max="8" value="${BW.adm}" data-bw="adm"></label></div></div></section>
+  <div id="bwbody">${bwBody()}</div>
+  <section class="grid2"><div class="panel"><h3>Respaldo 4G (si se corta la fibra)</h3><p>El router Archer MR402 (LTE Cat 4, hasta 150 Mbps de bajada) toma el tráfico. Durante el corte se apagan el Wi-Fi de clientes y la vista remota de cámaras; quedan la caja, un usuario, los sensores y la gestión: <b>${m1(esPico)} Mbps</b> como máximo y unos <b>${esProm} Mbps</b> de promedio.</p>
+   <p>A ese ritmo se gastan unos <b>${(gbH*1000).toFixed(0)} MB por hora</b>, así que el chip de 10 GB alcanza para unas <b>${horas.toFixed(0)} horas de corte al mes</b>.</p></div>
+   <div class="panel"><h3>Hub en la nube (VPS Vultr, Santiago)</h3><p>Por el hub solo pasa el tráfico entre sedes: vista de cámaras a pedido, sensores y gestión. Unos <b>3 Mbps</b> en el peor momento (una sede mostrando sus 4 cámaras más la gestión de las 4 sedes).</p>
+   <p>Al mes: media hora diaria de cámaras por sede (unos ${camGB.toFixed(0)} GB) más gestión y sensores (unos ${gesGB.toFixed(0)} GB), contado de entrada y de salida, da unos <b>${(Math.round(mesGB/10)*10).toFixed(0)} GB</b>. El plan del VPS incluye 1 TB de transferencia.</p>
+   <p>Por esto se compra la licencia <b>CHR P1</b> (US$ 45): la versión gratuita de MikroTik CHR limita cada interfaz a 1 Mbps y no alcanzaría.</p></div></section>`;
+}
+document.addEventListener("input",e=>{const k=e.target.dataset&&e.target.dataset.bw;if(!k)return;BW[k]=+e.target.value;const v=document.getElementById("bwv-"+k);if(v)v.textContent=BW[k];const b=document.getElementById("bwbody");if(b)b.innerHTML=bwBody()});
+const VIEWS={"resumen":vResumen,"fase-1":()=>vFase(1),"fase-2":()=>vFase(2),"fase-3":()=>vFase(3),"evaluacion":vEval,"comparacion":vComp,"ancho-de-banda":vBw,"catalogo":vCat};
 function render(keepFocus){
   const h=(location.hash||"#inicio").slice(1), isEq=h.startsWith("eq-"), name=isEq?h:(VIEWS[h]?h:"resumen");
   REG=[];
