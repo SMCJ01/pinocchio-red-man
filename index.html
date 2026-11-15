@@ -291,7 +291,7 @@ body.intro .top,body.intro main{display:none}
     <a class="brand" href="#inicio" style="color:inherit;text-decoration:none"><div class="logo" aria-hidden="true">P</div><div><b>Red MAN Pinocchio</b><small>Presupuesto por fases</small></div></a>
     <nav class="tabs" id="tabs" aria-label="Secciones">
       <a href="#inicio">Inicio</a><a href="#resumen">Resumen</a><a href="#fase-1">Fase 1</a><a href="#fase-2">Fase 2</a><a href="#fase-3">Fase 3</a><a href="#sedes-3d">Sedes 3D</a>
-      <a href="#evaluacion">Evaluación</a><a href="#comparacion">Comparación</a><a href="#cisco">Cisco PT</a><a href="#catalogo">Catálogo</a>
+      <a href="#evaluacion">Evaluación</a><a href="#comparacion">Comparación</a><a href="#cisco">Cisco PT</a><a href="#catalogo">Catálogo</a><a href="explicacion.html">¿Qué significa?</a>
     </nav>
     <div class="ctrls">
       <div class="seg" role="group" aria-label="Versión"><button id="vb" class="vb on" type="button">Básico</button><button id="vp" class="vp" type="button">Pro</button></div>
@@ -531,7 +531,7 @@ function vEval(){
   const vc=n=>`<b class="${n<0?"neg":""}">US$ ${f0(n)}</b>`;
   const row=(n,a)=>`<tr><td>${n}</td>${a.map(z=>`<td class="r ${z<0?"neg":""}">${z?f0(z):""}</td>`).join("")}</tr>`;
   const cap=e.cap[v];
-  return `<section class="phead"><div><div class="eyebrow">Evaluación económica · <span class="vtag">Versión ${VN[v]}</span></div><h2 style="font-size:clamp(24px,3.2vw,36px);margin-top:6px">¿Se paga la red?</h2><p class="lead">Tasa de 12 %, horizonte de 5 años, 60 % de los beneficios el primer año, reposición de baterías en el año 3 y 10 % de valor de rescate.</p></div>
+  return `<section class="phead"><div><div class="eyebrow">Evaluación económica · <span class="vtag">Versión ${VN[v]}</span></div><h2 style="font-size:clamp(24px,3.2vw,36px);margin-top:6px">¿Se paga la red?</h2><p class="lead">Tasa de 12 %, horizonte de 5 años, 60 % de los beneficios el primer año, reposición de baterías en el año 3 y 10 % de valor de rescate. <a href="explicacion.html">¿Qué es el VAN, la TIR y la recuperación? Explicado fácil →</a></p></div>
   <div class="seg light" role="group" aria-label="Escenario">${Object.keys(e.esc_dia).map(k=>`<button type="button" class="${k===S.esc?"on":""}" data-esc="${k}">${k}</button>`).join("")}</div></section>
   <div class="ind"><div><span>VAN (12 %)</span>${vc(x.van)}<em>${VN[o]}: US$ ${f0(y.van)}</em></div><div><span>TIR</span><b>${pct(x.tir)}</b><em>${VN[o]}: ${pct(y.tir)}</em></div><div><span>Recuperación simple</span><b>${mo(x.pb)}</b><em>${VN[o]}: ${mo(y.pb)}</em></div><div><span>Beneficio / costo</span><b>${x.bc.toFixed(2)}</b><em>${VN[o]}: ${y.bc.toFixed(2)}</em></div><div><span>Inversión fase 1</span><b>${moneyB(x.inv)}</b><em>Operación US$ ${f0(x.op)}/mes</em></div><div><span>Beneficio anual</span><b>${moneyB(x.B)}</b><em>Venta S/ ${f0(1100+3*e.esc_dia[S.esc])}/día</em></div></div>
   <section class="grid2"><div class="panel"><h3>Flujo de caja de la fase 1 (US$)</h3><div class="tbl"><table><thead><tr><th>Concepto</th>${[0,1,2,3,4,5].map(t=>`<th class="r">Año ${t}</th>`).join("")}</tr></thead><tbody>${row("Inversión",fl.inv)}${row("Beneficios",fl.ben)}${row("Operación",fl.op)}${row("Baterías de UPS",fl.bat)}${row("Valor de rescate",fl.salv)}<tr class="tot"><td>Flujo neto</td>${fl.net.map(z=>`<td class="r">${f0(z)}</td>`).join("")}</tr></tbody></table></div></div>
@@ -554,7 +554,7 @@ function vComp(){
   const T=v=>D.ph[v].totals, C=D.cisco.F, P=v=>T(v).F1+T(v).F2+T(v).F3, Cp=C.F1+C.F2+C.F3, e=D.econ;
   const r=(n,a,b,c)=>`<tr><td>${n}</td><td class="r">${a}</td><td class="r">${b}</td><td class="r">${c}</td></tr>`;
   const cis=[...D.cisco.keys.map(k=>({k,src:"cat",q:1,u:D.cat[k].u,t:D.cat[k].u,n:D.cat[k].n})),{k:"c8000v",src:"srv",q:1,u:D.srv.c8000v.u,t:D.srv.c8000v.u,n:D.srv.c8000v.n}];
-  return `<section><div class="eyebrow">Comparación</div><h2 style="font-size:clamp(24px,3.2vw,36px);margin-top:6px">Básico, pro y referencia Cisco</h2><p class="lead">Referencia Cisco: equipos vigentes equivalentes a los simulados en Packet Tracer.</p></section>
+  return `<section><div class="eyebrow">Comparación</div><h2 style="font-size:clamp(24px,3.2vw,36px);margin-top:6px">Básico, pro y referencia Cisco</h2><p class="lead">Referencia Cisco: lo que costaría comprar los mismos equipos Cisco que se usan en la simulación de Packet Tracer. <b>No se compra</b>: solo sirve para justificar por qué la red real usa MikroTik y TP-Link Omada. <a href="explicacion.html#cisco">¿Por qué está aquí? →</a></p></section>
   <section class="panel"><div class="tbl"><table><thead><tr><th>Indicador</th><th class="r">Básico</th><th class="r">Pro</th><th class="r">Referencia Cisco</th></tr></thead><tbody>
   ${r("Inversión fase 1",money(T("basico").F1),money(T("pro").F1),money(C.F1))}${r("Inversión fase 2",money(T("basico").F2),money(T("pro").F2),money(C.F2))}${r("Inversión fase 3",money(T("basico").F3),money(T("pro").F3),money(C.F3))}
   <tr class="tot"><td>Programa completo</td><td class="r">${money(P("basico"))}</td><td class="r">${money(P("pro"))}</td><td class="r">${money(Cp)}</td></tr>
@@ -1252,7 +1252,7 @@ function portadaHTML(){
   <div class="pshade"></div>
   <div class="pin wrap">
    <div class="ptop"><div class="brand"><div class="logo" aria-hidden="true">P</div><div><b>Red MAN Pinocchio</b><small>Universidad de Huánuco · 2026</small></div></div>
-    <nav class="pnav" aria-label="Menú"><a href="#resumen">Resumen</a><a href="#sedes-3d">Sedes 3D</a><a href="#evaluacion">Evaluación</a><a href="#comparacion">Comparación</a><a href="#cisco">Cisco PT</a><a href="#catalogo">Catálogo</a></nav></div>
+    <nav class="pnav" aria-label="Menú"><a href="#resumen">Resumen</a><a href="#sedes-3d">Sedes 3D</a><a href="#evaluacion">Evaluación</a><a href="#comparacion">Comparación</a><a href="#cisco">Cisco PT</a><a href="#catalogo">Catálogo</a><a href="explicacion.html">¿Qué significa?</a></nav></div>
    <div class="pmid">
     <div class="pkick">Red MAN con VPN · Panadería Pinocchio</div>
     <h1 class="ptitle" aria-label="Presupuesto">${[..."PRESUPUESTO"].map((c,i)=>`<span style="animation-delay:${i*45}ms">${c}</span>`).join("")}</h1>

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Qué significan los números?</title>
+<meta name="description" content="VAN, TIR, recuperación y referencia Cisco del proyecto Red MAN Pinocchio, explicados con ejemplos simples.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --paper:#f4f6f9; --surface:#ffffff; --ink:#132743; --muted:#5b6b82; --line:#dbe2ec;
+  --wheat:#c8902e; --basic:#2e5fa8; --pro:#b8790f; --good:#2f7d4f; --bad:#b33a3a; --chip:#e8eef7;
+  --soft-good:#e6f3ec; --soft-bad:#f8e7e7; --soft-wheat:#fbf1de;
+  --shadow:0 1px 2px rgba(19,39,67,.06),0 6px 20px rgba(19,39,67,.06);
+  --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0e1622; --surface:#152132; --ink:#e7edf6; --muted:#9aabc2; --line:#25344a;
+  --wheat:#dca54a; --basic:#6f9be0; --pro:#e0a344; --good:#5fbf86; --bad:#e27a7a; --chip:#1d2c42;
+  --soft-good:#16301f; --soft-bad:#3a1d1d; --soft-wheat:#33281a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0e1622; --surface:#152132; --ink:#e7edf6; --muted:#9aabc2; --line:#25344a;
+  --wheat:#dca54a; --basic:#6f9be0; --pro:#e0a344; --good:#5fbf86; --bad:#e27a7a; --chip:#1d2c42;
+  --soft-good:#16301f; --soft-bad:#3a1d1d; --soft-wheat:#33281a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--f-body);margin:0}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+h1,h2,h3{font-family:var(--f-display);letter-spacing:-.01em;text-wrap:balance;margin:0}
+a{color:var(--basic)}
+.n{font-family:var(--f-num);font-variant-numeric:tabular-nums;white-space:nowrap}
+.top{position:sticky;top:0;z-index:5;background:#132743;color:#eef3fa;border-bottom:3px solid var(--wheat)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px;flex-wrap:wrap}
+.top b{font-family:var(--f-display);font-size:18px}
+.top a{color:#f6c66a;text-decoration:none;font-weight:600}
+.hero{padding:40px 0 18px}
+.hero h1{font-size:clamp(28px,5vw,44px)}
+.hero p{color:var(--muted);max-width:62ch;font-size:17px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px;padding:0;list-style:none}
+.toc a{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--chip);color:var(--ink);text-decoration:none;font-size:14px}
+section.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px;margin:18px 0}
+section.card h2{font-size:clamp(21px,3vw,27px);margin-bottom:4px}
+.tag{display:inline-block;font:600 12px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--wheat);margin-bottom:6px}
+.big{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.big div{flex:1 1 170px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.big b{display:block;font:600 22px/1.2 var(--f-num)}
+.big span{color:var(--muted);font-size:13px}
+.pan{background:var(--soft-wheat);border-left:4px solid var(--wheat);border-radius:10px;padding:12px 14px;margin:12px 0}
+.pan::before{content:"🥖 Con panes: ";font-weight:700}
+.ok{background:var(--soft-good);border-left:4px solid var(--good);border-radius:10px;padding:10px 14px;margin:12px 0}
+.no{background:var(--soft-bad);border-left:4px solid var(--bad);border-radius:10px;padding:10px 14px;margin:12px 0}
+.rule{font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:600}
+td.r,th.r{text-align:right}
+.tbl{overflow-x:auto}
+.sim{display:grid;gap:12px;margin-top:10px}
+.sim input[type=range]{width:100%;accent-color:var(--wheat)}
+.sim .out{display:flex;flex-wrap:wrap;gap:12px}
+.sim .out div{flex:1 1 150px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.sim .out b{display:block;font:600 20px/1.2 var(--f-num)}
+.sim .out span{font-size:13px;color:var(--muted)}
+.verdict{font-weight:700;padding:10px 14px;border-radius:10px}
+.bars{display:grid;gap:8px;margin:12px 0}
+.bar{display:grid;grid-template-columns:150px 1fr 90px;gap:10px;align-items:center;font-size:14px}
+.bar i{display:block;height:16px;border-radius:6px}
+.foot{color:var(--muted);font-size:13px;padding:20px 0 40px}
+@media (max-width:560px){.bar{grid-template-columns:96px 1fr 70px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><b>Red MAN Pinocchio</b><a href="./#evaluacion">← Volver al presupuesto</a></div></header>
+<main class="wrap">
+  <div class="hero">
+    <div class="tag">Explicado fácil</div>
+    <h1>¿Qué significan los números del proyecto?</h1>
+    <p>Para entender el VAN, la TIR y el resto, imagina que la red es un <b>horno nuevo</b> para la panadería: se paga una vez, gasta algo cada mes y, a cambio, ayuda a ganar más. Todas las cifras son las de la versión básica.</p>
+    <ul class="toc">
+      <li><a href="#cuentas">Las cuentas</a></li><li><a href="#tasa">El 12 %</a></li><li><a href="#van">VAN</a></li><li><a href="#tir">TIR</a></li>
+      <li><a href="#recuperacion">Recuperación</a></li><li><a href="#bc">Beneficio/costo</a></li><li><a href="#equilibrio">Punto de equilibrio</a></li>
+      <li><a href="#programa">Fase 1 o programa</a></li><li><a href="#pro">Básico o pro</a></li><li><a href="#cisco">Referencia Cisco</a></li>
+    </ul>
+  </div>
+
+  <section class="card" id="cuentas">
+    <div class="tag">Primero</div><h2>Las cuatro cuentas de la fase 1</h2>
+    <div class="big">
+      <div><b>US$ 12,824</b><span>Inversión: se paga una sola vez</span></div>
+      <div><b>US$ 211</b><span>Operación: se paga cada mes</span></div>
+      <div><b>US$ 8,864</b><span>Beneficio: lo que la red ayuda a ganar o ahorrar al año</span></div>
+      <div><b>5 años</b><span>Tiempo en que se mide si conviene</span></div>
+    </div>
+    <p class="pan">comprar el horno es la <b>inversión</b>; la luz y el gas que consume cada mes son la <b>operación</b>; el pan que hornea de más y lo que deja de perderse es el <b>beneficio</b>.</p>
+    <p>La inversión ya incluye un <b>10 % de contingencia</b>: un colchón por si algo sale más caro. El beneficio sale de cinco ahorros: menos pan perdido (merma), más ventas, compras más baratas, menos faltantes de caja y menos trabajo administrativo. El primer año se cuenta solo el 60 %, porque el personal todavía está aprendiendo.</p>
+  </section>
+
+  <section class="card" id="tasa">
+    <div class="tag">La regla del juego</div><h2>El 12 %: un sol hoy vale más que un sol mañana</h2>
+    <p>Si el dueño no invierte en la red, podría dejar esa plata en otra cosa que le rinda. El proyecto usa un <b>12 % al año</b> como lo mínimo que esa plata debería ganar.</p>
+    <p class="pan">si hoy te dan S/ 100 o te prometen S/ 100 dentro de un año, eliges hoy. Con el 12 %, esos <span class="n">S/ 100</span> del próximo año valen hoy unos <span class="n">S/ 89</span>. A eso se le llama <b>descontar</b>.</p>
+  </section>
+
+  <section class="card" id="van">
+    <div class="tag">El número más importante</div><h2>VAN: lo que te queda en el bolsillo</h2>
+    <p>El <b>VAN (Valor Actual Neto)</b> suma todo lo que la red hace ganar en 5 años, en plata de hoy, y le resta todo lo que cuesta. Es lo que <b>sobra después de recuperar la inversión y de ganar el 12 %</b>.</p>
+    <div class="big"><div><b>US$ 7,185</b><span>VAN de la fase 1 (escenario medio)</span></div></div>
+    <p class="pan">pones US$ 12,824 en el horno. En 5 años te devuelve lo que pusiste, más el 12 % anual que te habría dado otra inversión, y encima te sobran <b>US$ 7,185</b> de hoy. Ese sobrante es el VAN.</p>
+    <div class="ok"><span class="rule">VAN positivo → conviene.</span> VAN cero → solo empatas con el 12 %. VAN negativo → mejor no hacerlo.</div>
+  </section>
+
+  <section class="card" id="tir">
+    <div class="tag">La rentabilidad</div><h2>TIR: el "interés" que paga el proyecto</h2>
+    <p>La <b>TIR (Tasa Interna de Retorno)</b> dice cuánto rinde la plata invertida, como si fuera un interés anual.</p>
+    <div class="big"><div><b>30.1 %</b><span>TIR de la fase 1</span></div><div><b>12 %</b><span>Lo mínimo que se exige</span></div></div>
+    <p class="pan">es como si una caja de ahorro te pagara 30 % al año por tu plata, cuando lo normal es 12 %. Por eso conviene.</p>
+    <div class="ok"><span class="rule">TIR mayor que 12 % → conviene.</span> Mientras más alta, mejor. Si la TIR fuera 10 %, rendiría menos de lo exigido.</div>
+  </section>
+
+  <section class="card" id="recuperacion">
+    <div class="tag">El tiempo</div><h2>Recuperación: ¿en cuánto tiempo vuelve la plata?</h2>
+    <div class="big"><div><b>31 meses</b><span>Recuperación simple</span></div><div><b>38 meses</b><span>Recuperación descontada al 12 %</span></div></div>
+    <p class="pan">el horno costó lo mismo que unos 12 días de venta de toda la panadería. Con lo que ahorra, en unos <b>2 años y medio</b> ya se pagó solo. Si cuentas que la plata futura vale un poco menos (el 12 %), son unos 3 años.</p>
+  </section>
+
+  <section class="card" id="bc">
+    <div class="tag">Por cada sol</div><h2>Beneficio/costo: cuánto vuelve por cada sol</h2>
+    <div class="big"><div><b>1.33</b><span>Relación beneficio/costo (escenario medio)</span></div></div>
+    <p class="pan">por cada S/ 1.00 que pones, vuelven <b>S/ 1.33</b> en plata de hoy.</p>
+    <div class="ok"><span class="rule">Mayor que 1 → conviene.</span> Menor que 1 → pierdes plata.</div>
+  </section>
+
+  <section class="card" id="equilibrio">
+    <div class="tag">¿Y si vendemos menos?</div><h2>Punto de equilibrio y escenarios</h2>
+    <p>Las ventas que dio el negocio son aproximadas, por eso se calcularon tres escenarios: <b>conservador</b> (cada sucursal vende S/ 700 al día), <b>medio</b> (S/ 850) y <b>alto</b> (S/ 1,000).</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Escenario</th><th class="r">Beneficio al año</th><th class="r">VAN</th><th class="r">TIR</th><th>¿Conviene?</th></tr></thead>
+      <tbody>
+        <tr><td>Conservador</td><td class="r n">US$ 7,900</td><td class="r n">US$ 4,055</td><td class="r n">22.6 %</td><td>Sí</td></tr>
+        <tr><td>Medio</td><td class="r n">US$ 8,864</td><td class="r n">US$ 7,185</td><td class="r n">30.1 %</td><td>Sí</td></tr>
+        <tr><td>Alto</td><td class="r n">US$ 9,828</td><td class="r n">US$ 10,317</td><td class="r n">37.2 %</td><td>Sí</td></tr>
+      </tbody></table></div>
+    <p>El <b>punto de equilibrio</b> es el beneficio mínimo para que el VAN no sea negativo: <span class="n">US$ 6,652</span> al año, el <b>75 %</b> de lo esperado. Si la red logra menos que eso, ya no conviene.</p>
+    <p class="pan">si el horno ayuda a ganar al menos 3 de cada 4 soles que esperábamos, igual vale la pena.</p>
+
+    <h3 style="margin-top:18px">Pruébalo tú mismo</h3>
+    <div class="sim">
+      <label for="pct">¿Qué parte del beneficio esperado se logra? <b id="pctv" class="n">100 %</b></label>
+      <input id="pct" type="range" min="40" max="130" step="5" value="100" aria-describedby="verdict">
+      <div class="out">
+        <div><b id="simBen">US$ 8,864</b><span>Beneficio al año</span></div>
+        <div><b id="simVan">US$ 7,185</b><span>VAN (12 %)</span></div>
+        <div><b id="simTir">30.1 %</b><span>TIR</span></div>
+      </div>
+      <div id="verdict" class="verdict ok" role="status">Conviene: queda plata después de recuperar todo.</div>
+    </div>
+  </section>
+
+  <section class="card" id="programa">
+    <div class="tag">Dos miradas</div><h2>"VAN fase 1" o "VAN programa": ¿cuál es la diferencia?</h2>
+    <p>La página muestra dos VAN y dos TIR porque mide dos cosas distintas:</p>
+    <div class="tbl"><table>
+      <thead><tr><th></th><th>Fase 1</th><th>Programa completo</th></tr></thead>
+      <tbody>
+        <tr><td>Qué incluye</td><td>Solo las 4 sedes de Huánuco (2027)</td><td>Las 3 fases: 10 sedes (2027 a 2030)</td></tr>
+        <tr><td>Se mide hasta</td><td>5 años (2031)</td><td>2034</td></tr>
+        <tr><td>Inversión</td><td class="n">US$ 12,824</td><td class="n">US$ 33,983</td></tr>
+        <tr><td>VAN</td><td class="n">US$ 7,185</td><td class="n">US$ 28,621</td></tr>
+        <tr><td>TIR</td><td class="n">30.1 %</td><td class="n">36.9 %</td></tr>
+      </tbody></table></div>
+    <p class="pan">el <b>VAN de la fase 1</b> responde "¿conviene comprar el primer horno?". El <b>VAN del programa</b> responde "¿conviene el plan entero de abrir más panaderías con su horno?". El programa rinde más porque cada tienda nueva reutiliza el diseño, el hub y el sistema que ya se pagaron en la fase 1.</p>
+    <p>Para la monografía, la decisión del dueño es la <b>fase 1</b> (US$ 12,824, debajo del tope de US$ 13,000). El programa sirve para mostrar que crecer también conviene.</p>
+  </section>
+
+  <section class="card" id="pro">
+    <div class="tag">Dos presupuestos</div><h2>Versión básica o pro</h2>
+    <p>La <b>básica</b> usa equipos MikroTik y TP-Link Omada a buen precio. La <b>pro</b> usa equipos más caros y robustos: doble fuente, 4G en todas las sedes, cámaras IP y control biométrico.</p>
+    <div class="tbl"><table>
+      <thead><tr><th></th><th class="r">Básica</th><th class="r">Pro</th></tr></thead>
+      <tbody>
+        <tr><td>Inversión fase 1</td><td class="r n">US$ 12,824</td><td class="r n">US$ 19,117</td></tr>
+        <tr><td>VAN fase 1</td><td class="r n">US$ 7,185</td><td class="r n" style="color:var(--bad)">US$ −867</td></tr>
+        <tr><td>VAN programa</td><td class="r n">US$ 28,621</td><td class="r n">US$ 11,837</td></tr>
+      </tbody></table></div>
+    <p class="pan">el horno pro es mejor, pero con lo que vende esta panadería no alcanza a pagarse en 5 años. Por eso se recomienda la básica.</p>
+  </section>
+
+  <section class="card" id="cisco">
+    <div class="tag">Pregunta frecuente</div><h2>¿Qué es la "referencia Cisco"? ¿Es necesaria?</h2>
+    <p>La simulación se hace en <b>Cisco Packet Tracer</b>, y ese programa solo trae equipos Cisco (router 2911, switch 2960). Pero en la vida real <b>no se compra nada de Cisco</b>: se compran MikroTik y TP-Link Omada, que hacen lo mismo y cuestan mucho menos.</p>
+    <p>La "referencia Cisco" responde a una sola pregunta: <i>"¿y si hubiéramos comprado los mismos equipos de la simulación?"</i></p>
+    <div class="bars" aria-label="Costo de la fase 1 por marca">
+      <div class="bar"><span>Básica (se compra)</span><i style="width:49.7%;background:var(--basic)"></i><b class="n">US$ 12,824</b></div>
+      <div class="bar"><span>Pro</span><i style="width:74.1%;background:var(--pro)"></i><b class="n">US$ 19,117</b></div>
+      <div class="bar"><span>Todo Cisco (solo referencia)</span><i style="width:100%;background:var(--muted)"></i><b class="n">US$ 25,800</b></div>
+    </div>
+    <p class="pan">en el simulador practicas con un horno de marca famosa porque es el único que trae, pero en la tienda compras uno que hornea igual y cuesta la mitad.</p>
+    <div class="ok"><span class="rule">¿Es necesaria?</span> Para comprar, <b>no</b>: nunca se compra. Para la monografía sí sirve, porque justifica ante el docente por qué la simulación usa Cisco y la red real no: Cisco costaría unas <b>dos veces más</b>. Si prefieren simplificar, se puede quitar sin cambiar el presupuesto.</div>
+  </section>
+
+  <section class="card">
+    <div class="tag">Otras palabras</div><h2>Mini glosario</h2>
+    <div class="tbl"><table><tbody>
+      <tr><td><b>Valor de rescate</b></td><td>Lo que todavía valen los equipos a los 5 años (se toma el 10 %: US$ 717). Como vender el horno usado.</td></tr>
+      <tr><td><b>Crédito fiscal del IGV</b></td><td>El IGV de lo comprado con factura se descuenta del IGV que el negocio paga a SUNAT. Recupera unos US$ 1,589 y la inversión real baja a US$ 11,235.</td></tr>
+      <tr><td><b>Capacidad de pago</b></td><td>Si se pide un crédito a 36 meses (25 % anual), la cuota es de US$ 493 al mes. El primer año el dueño pone unos US$ 261 al mes; desde el segundo año la red ya paga sola su cuota.</td></tr>
+      <tr><td><b>Contingencia</b></td><td>10 % extra por si algo sube de precio o falta algún material.</td></tr>
+      <tr><td><b>Etapa A y B</b></td><td>Si se quiere gastar menos al inicio: primero la red y la caja (US$ 11,027) y luego las cámaras y los sensores (US$ 1,797).</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <p class="foot">Universidad de Huánuco · Redes y Telecomunicaciones I · 2026. Cifras de la versión básica, tasa de 12 %, 5 años y tipo de cambio S/ 3.433. <a href="./">Volver al presupuesto</a>.</p>
+</main>
+<script>
+(function(){
+  var INV=12824, OP=211*12, BAT=80, SALV=717, B0=8864;
+  function flows(B){var f=[-INV];for(var t=1;t<=5;t++){f.push((t===1?0.6:1)*B-OP-(t===3?BAT:0)+(t===5?SALV:0))}return f}
+  function npv(r,f){return f.reduce(function(a,c,t){return a+c/Math.pow(1+r,t)},0)}
+  function irr(f){var lo=-0.99,hi=3;if(npv(lo+0.0001,f)<0)return null;for(var i=0;i<120;i++){var m=(lo+hi)/2;if(npv(m,f)>0)lo=m;else hi=m}return lo}
+  var fmt=function(n){return "US$ "+Math.round(n).toLocaleString("en-US")};
+  var el=function(id){return document.getElementById(id)};
+  function upd(){
+    var p=+el("pct").value, B=B0*p/100, f=flows(B), v=npv(0.12,f), r=irr(f);
+    el("pctv").textContent=p+" %"; el("simBen").textContent=fmt(B); el("simVan").textContent=p===100?"US$ 7,185":fmt(v);
+    el("simTir").textContent=r===null?"—":(r*100).toFixed(1)+" %";
+    var d=el("verdict");
+    if(v>=0){d.className="verdict ok";d.textContent="Conviene: queda plata después de recuperar todo y ganar el 12 %."}
+    else{d.className="verdict no";d.textContent="No conviene: con este beneficio la red no alcanza a pagarse en 5 años."}
+  }
+  el("pct").addEventListener("input",upd); upd();
+})();
+</script>
+</body>
+</html>
