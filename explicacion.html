@@ -149,15 +149,6 @@ input[type=range]{width:100%;accent-color:var(--wheat);height:28px}
 .bar{display:grid;grid-template-columns:180px 1fr 92px;gap:10px;align-items:center;font-size:14px}
 .bar i{display:block;height:22px;border-radius:7px;width:0;transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
 
-.q{border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0;background:var(--paper)}
-.q p{margin:0 0 8px;font-weight:600}
-.q .opts{display:flex;gap:8px;flex-wrap:wrap}
-.q button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 16px;font-weight:600;transition:background-color .2s}
-.q button:hover{background:var(--chip)}
-.q button.right{background:var(--soft-good);border-color:var(--good);color:var(--good)}
-.q button.wrong{background:var(--soft-bad);border-color:var(--bad);color:var(--bad)}
-.q .fb{margin-top:8px;font-size:14px;min-height:1.2em}
-.score{font:700 18px var(--f-display)}
 details{border-bottom:1px solid var(--line);padding:10px 0}
 summary{cursor:pointer;font-weight:600}
 summary:hover{color:var(--wheat)}
@@ -182,7 +173,7 @@ summary:hover{color:var(--wheat)}
 <nav class="toc" aria-label="Capítulos"><div class="wrap"><ul id="toc">
   <li><a href="#cuentas">Las cuentas</a></li><li><a href="#tasa">El 12 %</a></li><li><a href="#van">VAN</a></li><li><a href="#tir">TIR</a></li>
   <li><a href="#recuperacion">Recuperación</a></li><li><a href="#bc">Beneficio/costo</a></li><li><a href="#equilibrio">Equilibrio</a></li>
-  <li><a href="#programa">Fase 1 o programa</a></li><li><a href="#pro">Básico o pro</a></li><li><a href="#cisco">Cisco</a></li><li><a href="#quiz">Quiz</a></li>
+  <li><a href="#programa">Fase 1 o programa</a></li><li><a href="#pro">Básico o pro</a></li><li><a href="#cisco">Cisco</a></li>
 </ul></div></nav>
 
 <main class="wrap">
@@ -323,12 +314,6 @@ summary:hover{color:var(--wheat)}
     <p><b>¿Es necesaria?</b> Para comprar, no. Para la monografía sí ayuda: le muestra al docente por qué la simulación usa Cisco y la red real no, porque Cisco costaría unas <b>dos veces más</b>.</p>
   </section>
 
-  <section class="ch" id="quiz">
-    <header><div class="ico">🧠</div><div><div class="k">Para terminar</div><h2>Ponte a prueba</h2></div></header>
-    <div id="qs"></div>
-    <p class="score" id="score" aria-live="polite"></p>
-  </section>
-
   <section class="ch">
     <header><div class="ico">📖</div><div><div class="k">Extra</div><h2>Otras palabras del presupuesto</h2></div></header>
     <details><summary>Contingencia</summary><p>Un 10 % extra por si algo sube de precio o falta material. Como comprar un saco de harina de más "por si acaso".</p></details>
@@ -435,19 +420,6 @@ summary:hover{color:var(--wheat)}
   /* 10. barras */
   var grown=false;function growBars(){if(grown)return;grown=true;document.querySelectorAll("#cbars i").forEach(function(i,k){setTimeout(function(){i.style.width=i.dataset.w+"%"},k*220)})}
 
-  /* quiz */
-  var Q=[["Un proyecto tiene VAN de US$ −500. ¿Conviene?",["Sí","No"],1,"Un VAN negativo dice que entra menos de lo que sale."],
-         ["La TIR sale 9 % y se exige 12 %. ¿Conviene?",["Sí","No"],1,"Rinde menos que el 12 % exigido: mejor dejar la plata en otro lado."],
-         ["Beneficio/costo de 1.33 significa que por cada S/ 1…",["vuelven S/ 0.33","vuelven S/ 1.33"],1,"Vuelve el sol que pusiste y 33 céntimos más."],
-         ["¿Se compran equipos Cisco para la red real?",["Sí","No"],1,"Cisco solo está en la simulación; se compra MikroTik y TP-Link Omada."],
-         ["Si los beneficios llegan al 80 % de lo esperado, ¿el horno conviene?",["Sí","No"],0,"El punto de equilibrio es 75 %, y 80 % está por encima."]];
-  var ok=0,done=0;
-  $("qs").innerHTML=Q.map(function(q,i){return '<div class="q" data-i="'+i+'"><p>'+(i+1)+'. '+q[0]+'</p><div class="opts">'+q[1].map(function(o,j){return '<button data-j="'+j+'">'+o+'</button>'}).join("")+'</div><div class="fb" aria-live="polite"></div></div>'}).join("");
-  $("qs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var box=b.closest(".q");if(box.dataset.done)return;box.dataset.done=1;
-    var q=Q[+box.dataset.i],right=+b.dataset.j===q[2];b.classList.add(right?"right":"wrong");
-    if(!right)box.querySelectorAll("button")[q[2]].classList.add("right");
-    box.querySelector(".fb").textContent=(right?"✅ ¡Bien! ":"❌ Casi. ")+q[3];done++;if(right)ok++;
-    if(done===Q.length)$("score").textContent=ok===Q.length?"🏆 "+ok+" de "+Q.length+": ¡ya puedes explicarle el proyecto al dueño!":"🥖 "+ok+" de "+Q.length+". Repasa los capítulos y recarga la página para intentarlo otra vez."});
 })();
 </script>
 </body>
