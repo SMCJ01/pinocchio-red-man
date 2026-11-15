@@ -3,235 +3,451 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>¿Qué significan los números?</title>
-<meta name="description" content="VAN, TIR, recuperación y referencia Cisco del proyecto Red MAN Pinocchio, explicados con ejemplos simples.">
+<title>Los números, con panes</title>
+<meta name="description" content="VAN, TIR, recuperación, beneficio/costo y referencia Cisco del proyecto Red MAN Pinocchio, explicados con ejemplos de panadería e interactivos.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
 <style>
 :root{
-  --paper:#f4f6f9; --surface:#ffffff; --ink:#132743; --muted:#5b6b82; --line:#dbe2ec;
-  --wheat:#c8902e; --basic:#2e5fa8; --pro:#b8790f; --good:#2f7d4f; --bad:#b33a3a; --chip:#e8eef7;
-  --soft-good:#e6f3ec; --soft-bad:#f8e7e7; --soft-wheat:#fbf1de;
-  --shadow:0 1px 2px rgba(19,39,67,.06),0 6px 20px rgba(19,39,67,.06);
+  --paper:#f6f3ee; --surface:#ffffff; --ink:#132743; --muted:#5b6b82; --line:#e3ddd2;
+  --wheat:#c8902e; --crust:#9c5a24; --basic:#2e5fa8; --pro:#b8790f; --good:#2f7d4f; --bad:#b33a3a; --chip:#efe8db;
+  --soft-good:#e3f2e9; --soft-bad:#f9e5e5; --soft-wheat:#fbf1de; --navy:#132743;
+  --shadow:0 1px 2px rgba(19,39,67,.06),0 10px 30px rgba(19,39,67,.08);
   --f-display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
   --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-num:"JetBrains Mono",ui-monospace,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0e1622; --surface:#152132; --ink:#e7edf6; --muted:#9aabc2; --line:#25344a;
-  --wheat:#dca54a; --basic:#6f9be0; --pro:#e0a344; --good:#5fbf86; --bad:#e27a7a; --chip:#1d2c42;
+  --paper:#0e1622; --surface:#152132; --ink:#e7edf6; --muted:#9aabc2; --line:#26354b;
+  --wheat:#dca54a; --crust:#d08a4e; --basic:#6f9be0; --pro:#e0a344; --good:#5fbf86; --bad:#e27a7a; --chip:#1d2c42;
   --soft-good:#16301f; --soft-bad:#3a1d1d; --soft-wheat:#33281a;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}}
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.3); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#0e1622; --surface:#152132; --ink:#e7edf6; --muted:#9aabc2; --line:#25344a;
-  --wheat:#dca54a; --basic:#6f9be0; --pro:#e0a344; --good:#5fbf86; --bad:#e27a7a; --chip:#1d2c42;
+  --paper:#0e1622; --surface:#152132; --ink:#e7edf6; --muted:#9aabc2; --line:#26354b;
+  --wheat:#dca54a; --crust:#d08a4e; --basic:#6f9be0; --pro:#e0a344; --good:#5fbf86; --bad:#e27a7a; --chip:#1d2c42;
   --soft-good:#16301f; --soft-bad:#3a1d1d; --soft-wheat:#33281a;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.3); color-scheme:dark}
 *{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:110px}
 body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--f-body);margin:0}
-.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px}
 h1,h2,h3{font-family:var(--f-display);letter-spacing:-.01em;text-wrap:balance;margin:0}
-a{color:var(--basic)}
 .n{font-family:var(--f-num);font-variant-numeric:tabular-nums;white-space:nowrap}
-.top{position:sticky;top:0;z-index:5;background:#132743;color:#eef3fa;border-bottom:3px solid var(--wheat)}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px;flex-wrap:wrap}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--wheat);outline-offset:2px}
+
+.top{position:sticky;top:0;z-index:10;background:var(--navy);color:#eef3fa;border-bottom:3px solid var(--wheat)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px;position:relative}
 .top b{font-family:var(--f-display);font-size:18px}
-.top a{color:#f6c66a;text-decoration:none;font-weight:600}
-.hero{padding:40px 0 18px}
-.hero h1{font-size:clamp(28px,5vw,44px)}
-.hero p{color:var(--muted);max-width:62ch;font-size:17px}
-.toc{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px;padding:0;list-style:none}
-.toc a{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--chip);color:var(--ink);text-decoration:none;font-size:14px}
-section.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px;margin:18px 0}
-section.card h2{font-size:clamp(21px,3vw,27px);margin-bottom:4px}
-.tag{display:inline-block;font:600 12px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--wheat);margin-bottom:6px}
-.big{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
-.big div{flex:1 1 170px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.big b{display:block;font:600 22px/1.2 var(--f-num)}
-.big span{color:var(--muted);font-size:13px}
-.pan{background:var(--soft-wheat);border-left:4px solid var(--wheat);border-radius:10px;padding:12px 14px;margin:12px 0}
-.pan::before{content:"🥖 Con panes: ";font-weight:700}
-.ok{background:var(--soft-good);border-left:4px solid var(--good);border-radius:10px;padding:10px 14px;margin:12px 0}
-.no{background:var(--soft-bad);border-left:4px solid var(--bad);border-radius:10px;padding:10px 14px;margin:12px 0}
-.rule{font-weight:600}
-table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0}
-th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{font-size:13px;color:var(--muted);font-weight:600}
-td.r,th.r{text-align:right}
-.tbl{overflow-x:auto}
-.sim{display:grid;gap:12px;margin-top:10px}
-.sim input[type=range]{width:100%;accent-color:var(--wheat)}
-.sim .out{display:flex;flex-wrap:wrap;gap:12px}
-.sim .out div{flex:1 1 150px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.sim .out b{display:block;font:600 20px/1.2 var(--f-num)}
-.sim .out span{font-size:13px;color:var(--muted)}
-.verdict{font-weight:700;padding:10px 14px;border-radius:10px}
-.bars{display:grid;gap:8px;margin:12px 0}
-.bar{display:grid;grid-template-columns:150px 1fr 90px;gap:10px;align-items:center;font-size:14px}
-.bar i{display:block;height:16px;border-radius:6px}
-.foot{color:var(--muted);font-size:13px;padding:20px 0 40px}
-@media (max-width:560px){.bar{grid-template-columns:96px 1fr 70px}}
+.top a{color:#f6c66a;text-decoration:none;font-weight:600;border-radius:8px;padding:4px 8px;transition:background-color .15s}
+.top a:hover{background:rgba(246,198,106,.15)}
+.prog{position:absolute;left:0;bottom:-3px;height:3px;background:#fff3d6;width:0}
+.toc{position:sticky;top:51px;z-index:9;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.toc ul{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0;padding:8px 0;list-style:none}
+.toc a{display:block;white-space:nowrap;padding:5px 11px;border-radius:999px;color:var(--ink);text-decoration:none;font-size:13.5px;transition:background-color .15s}
+.toc a:hover{background:var(--chip)}
+.toc a.on{background:var(--wheat);color:#132743;font-weight:600}
+
+.hero{padding:40px 0 10px;display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:center}
+.hero h1{font-size:clamp(30px,5.4vw,50px);line-height:1.08}
+.hero h1 em{font-style:normal;color:var(--wheat)}
+.hero p{color:var(--muted);font-size:17px;max-width:56ch}
+.oven{max-width:280px;justify-self:center;width:100%}
+.oven svg{width:100%;height:auto;display:block}
+.steam{animation:rise 3s ease-in infinite;opacity:0}
+.steam:nth-child(2){animation-delay:1s}.steam:nth-child(3){animation-delay:2s}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:.8}100%{transform:translateY(-40px);opacity:0}}
+.glow{animation:glow 2.4s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.55}to{opacity:1}}
+
+.ch{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:24px;margin:22px 0;opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.ch.in{opacity:1;transform:none}
+.ch:target{animation:pulse 1.4s ease-out 1}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--wheat) 60%,transparent)}100%{box-shadow:0 0 0 18px transparent}}
+.ch header{display:flex;gap:14px;align-items:flex-start;margin-bottom:10px}
+.ch .ico{flex:none;width:52px;height:52px;border-radius:14px;background:var(--soft-wheat);display:grid;place-items:center;font-size:28px}
+.k{font:600 12px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--wheat)}
+.ch h2{font-size:clamp(22px,3.2vw,30px);margin-top:4px}
+.lead{font-size:17px}
+.pan{background:var(--soft-wheat);border-radius:14px;padding:12px 16px;margin:14px 0;display:flex;gap:10px}
+.pan::before{content:"🥖";font-size:22px;line-height:1.2}
+.rule{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.rule span{padding:6px 12px;border-radius:999px;font-size:14px;font-weight:600}
+.r-ok{background:var(--soft-good);color:var(--good)} .r-mid{background:var(--chip)} .r-no{background:var(--soft-bad);color:var(--bad)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.tile{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center;transition:transform .2s}
+.tile:hover{transform:translateY(-3px)}
+.tile .e{font-size:26px}
+.tile b{display:block;font:600 21px/1.2 var(--f-num);margin:4px 0}
+.tile span{font-size:13px;color:var(--muted)}
+.seg{display:inline-flex;background:var(--chip);border-radius:999px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:6px 14px;border-radius:999px;font-size:14px;font-weight:600;transition:background-color .2s}
+.seg button:hover{background:color-mix(in srgb,var(--surface) 50%,transparent)}
+.seg button.on{background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+input[type=range]{width:100%;accent-color:var(--wheat);height:28px}
+.out{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.out div{flex:1 1 140px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.out b{display:block;font:600 20px/1.2 var(--f-num)}
+.out span{font-size:13px;color:var(--muted)}
+
+.coins{display:flex;align-items:flex-end;gap:12px;height:130px;margin:12px 0 4px;padding:0 4px;overflow-x:auto}
+.coin{display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe7a3,#d9a23a 60%,#a8741c);color:#5a3a06;font:700 12px var(--f-num);box-shadow:0 2px 0 #8a5c12;transition:width .35s,height .35s}
+.coins figure{margin:0;display:grid;justify-items:center;gap:4px;font-size:12px;color:var(--muted);transition:opacity .3s}
+
+.scale{position:relative;height:240px;margin:12px auto 0;max-width:520px}
+.beam{position:absolute;left:14%;right:14%;top:130px;height:8px;background:var(--crust);border-radius:4px;transition:transform .9s cubic-bezier(.3,1.6,.5,1)}
+.post{position:absolute;left:50%;top:130px;width:10px;height:90px;margin-left:-5px;background:var(--crust);border-radius:4px}
+.base{position:absolute;left:50%;top:214px;width:140px;height:12px;margin-left:-70px;background:var(--crust);border-radius:6px}
+.plate{position:absolute;bottom:8px;width:150px;margin-left:-75px;text-align:center}
+.plate .pile{font-size:24px;line-height:1;min-height:28px}
+.plate .dish{height:10px;border-radius:0 0 80px 80px;background:color-mix(in srgb,var(--crust) 70%,#fff)}
+.plate b{display:block;font:600 15px var(--f-num)}
+.plate small{color:var(--muted);font-size:12px;display:block}
+.pl{left:0}.pr{left:100%}
+.verdict{font-weight:700;padding:10px 14px;border-radius:12px;margin-top:10px;transition:background-color .3s}
+.v-ok{background:var(--soft-good);color:var(--good)} .v-no{background:var(--soft-bad);color:var(--bad)}
+
+.race{display:grid;gap:12px;margin:14px 0}
+.lane{display:grid;grid-template-columns:120px 1fr 92px;gap:10px;align-items:center}
+.track{height:36px;background:var(--paper);border:1px dashed var(--line);border-radius:10px;position:relative;overflow:hidden}
+.runner{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:9px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:20px;transition:width 2.2s cubic-bezier(.2,.7,.2,1)}
+.btn{border:0;background:var(--wheat);color:#132743;font-weight:700;padding:9px 18px;border-radius:999px;box-shadow:0 3px 0 var(--crust);transition:transform .1s,box-shadow .1s}
+.btn:hover{filter:brightness(1.05)}
+.btn:active{transform:translateY(3px);box-shadow:none}
+
+.jarbox{display:grid;grid-template-columns:170px 1fr;gap:20px;align-items:center}
+.jar{position:relative;width:150px;height:190px;border:4px solid var(--crust);border-top-width:10px;border-radius:18px 18px 34px 34px;overflow:hidden;background:var(--paper)}
+.fill{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(#f0c46a,#c8902e);transition:height .25s}
+.fill.done{background:linear-gradient(#7fd39e,#2f7d4f)}
+.jar .pct{position:absolute;inset:0;display:grid;place-items:center;font:700 22px var(--f-num);color:var(--ink)}
+
+.bc{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:30px;margin:12px 0}
+.bc .side{display:flex;gap:4px;align-items:center;min-height:40px}
+.pop{display:inline-block;animation:pop .35s ease-out both}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+
+.gauge{height:18px;border-radius:9px;background:linear-gradient(90deg,var(--bad) 0 38.9%,#e0b23c 38.9% 44.4%,var(--good) 44.4% 100%);position:relative;margin:20px 0 6px}
+.gauge .needle{position:absolute;top:-8px;width:4px;height:34px;background:var(--ink);border-radius:2px;margin-left:-2px;transition:left .25s}
+.gauge .be{position:absolute;top:24px;font-size:12px;color:var(--muted);transform:translateX(-50%);white-space:nowrap}
+
+.mapdots{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.dot{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:var(--paper);border:1px solid var(--line);transition:transform .3s,opacity .3s}
+.dot.off{opacity:.15;transform:scale(.75)}
+
+.flips{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+.flip{perspective:900px;border:0;background:none;padding:0;text-align:left;height:210px}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip:hover .in{transform:rotateY(8deg)}
+.flip.on .in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:16px;padding:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.front{background:var(--paper)}
+.back{transform:rotateY(180deg)}
+.face .big{font:700 24px var(--f-num)}
+.face .hint{margin-top:auto;font-size:12px;color:var(--muted)}
+
+.bars{display:grid;gap:10px;margin:14px 0}
+.bar{display:grid;grid-template-columns:180px 1fr 92px;gap:10px;align-items:center;font-size:14px}
+.bar i{display:block;height:22px;border-radius:7px;width:0;transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+
+.q{border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0;background:var(--paper)}
+.q p{margin:0 0 8px;font-weight:600}
+.q .opts{display:flex;gap:8px;flex-wrap:wrap}
+.q button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 16px;font-weight:600;transition:background-color .2s}
+.q button:hover{background:var(--chip)}
+.q button.right{background:var(--soft-good);border-color:var(--good);color:var(--good)}
+.q button.wrong{background:var(--soft-bad);border-color:var(--bad);color:var(--bad)}
+.q .fb{margin-top:8px;font-size:14px;min-height:1.2em}
+.score{font:700 18px var(--f-display)}
+details{border-bottom:1px solid var(--line);padding:10px 0}
+summary{cursor:pointer;font-weight:600}
+summary:hover{color:var(--wheat)}
+.foot{color:var(--muted);font-size:13px;padding:10px 0 40px}
+.foot a{color:var(--basic)}
+
+@media (max-width:720px){
+  .hero{grid-template-columns:1fr}.oven{max-width:180px}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .jarbox{grid-template-columns:1fr;justify-items:center}
+  .flips{grid-template-columns:1fr}
+  .lane{grid-template-columns:86px 1fr 74px;font-size:13px}
+  .bar{grid-template-columns:110px 1fr 80px;font-size:13px}
+  .plate{width:116px;margin-left:-58px}
+  .top b{font-size:15px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.ch{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap"><b>Red MAN Pinocchio</b><a href="./#comparacion">← Volver a la comparación</a></div></header>
+<header class="top"><div class="wrap"><b>🥖 Los números, con panes</b><a href="./#comparacion">← Volver al presupuesto</a><div class="prog" id="prog"></div></div></header>
+<nav class="toc" aria-label="Capítulos"><div class="wrap"><ul id="toc">
+  <li><a href="#cuentas">Las cuentas</a></li><li><a href="#tasa">El 12 %</a></li><li><a href="#van">VAN</a></li><li><a href="#tir">TIR</a></li>
+  <li><a href="#recuperacion">Recuperación</a></li><li><a href="#bc">Beneficio/costo</a></li><li><a href="#equilibrio">Equilibrio</a></li>
+  <li><a href="#programa">Fase 1 o programa</a></li><li><a href="#pro">Básico o pro</a></li><li><a href="#cisco">Cisco</a></li><li><a href="#quiz">Quiz</a></li>
+</ul></div></nav>
+
 <main class="wrap">
-  <div class="hero">
-    <div class="tag">Explicado fácil</div>
-    <h1>¿Qué significan los números del proyecto?</h1>
-    <p>Para entender el VAN, la TIR y el resto, imagina que la red es un <b>horno nuevo</b> para la panadería: se paga una vez, gasta algo cada mes y, a cambio, ayuda a ganar más. Todas las cifras son las de la versión básica.</p>
-    <ul class="toc">
-      <li><a href="#cuentas">Las cuentas</a></li><li><a href="#tasa">El 12 %</a></li><li><a href="#van">VAN</a></li><li><a href="#tir">TIR</a></li>
-      <li><a href="#recuperacion">Recuperación</a></li><li><a href="#bc">Beneficio/costo</a></li><li><a href="#equilibrio">Punto de equilibrio</a></li>
-      <li><a href="#programa">Fase 1 o programa</a></li><li><a href="#pro">Básico o pro</a></li><li><a href="#cisco">Referencia Cisco</a></li>
-    </ul>
-  </div>
-
-  <section class="card" id="cuentas">
-    <div class="tag">Primero</div><h2>Las cuatro cuentas de la fase 1</h2>
-    <div class="big">
-      <div><b>US$ 12,824</b><span>Inversión: se paga una sola vez</span></div>
-      <div><b>US$ 211</b><span>Operación: se paga cada mes</span></div>
-      <div><b>US$ 8,864</b><span>Beneficio: lo que la red ayuda a ganar o ahorrar al año</span></div>
-      <div><b>5 años</b><span>Tiempo en que se mide si conviene</span></div>
+  <section class="hero">
+    <div>
+      <h1>La red es un <em>horno nuevo</em> para Pinocchio</h1>
+      <p>Se paga una vez, gasta un poquito cada mes y, a cambio, ayuda a vender más y a botar menos pan. Las preguntas son tres: <b>¿vale la pena? ¿cuánto gana? ¿cuándo se paga solo?</b> Aquí están las respuestas, con las cifras reales del proyecto y para jugar con ellas.</p>
     </div>
-    <p class="pan">comprar el horno es la <b>inversión</b>; la luz y el gas que consume cada mes son la <b>operación</b>; el pan que hornea de más y lo que deja de perderse es el <b>beneficio</b>.</p>
-    <p>La inversión ya incluye un <b>10 % de contingencia</b>: un colchón por si algo sale más caro. El beneficio sale de cinco ahorros: menos pan perdido (merma), más ventas, compras más baratas, menos faltantes de caja y menos trabajo administrativo. El primer año se cuenta solo el 60 %, porque el personal todavía está aprendiendo.</p>
+    <div class="oven" aria-hidden="true">
+      <svg viewBox="0 0 200 190">
+        <g fill="#ffffff" opacity=".9"><circle class="steam" cx="70" cy="44" r="9"/><circle class="steam" cx="100" cy="38" r="11"/><circle class="steam" cx="130" cy="44" r="9"/></g>
+        <rect x="30" y="55" width="140" height="120" rx="16" fill="#9c5a24"/>
+        <rect x="42" y="68" width="116" height="74" rx="10" fill="#3b1f0e"/>
+        <rect class="glow" x="48" y="74" width="104" height="62" rx="8" fill="#f2a33a"/>
+        <g font-size="22" text-anchor="middle"><text x="75" y="113">🥖</text><text x="100" y="113">🍞</text><text x="125" y="113">🥐</text></g>
+        <circle cx="60" cy="158" r="6" fill="#f6c66a"/><circle cx="80" cy="158" r="6" fill="#f6c66a"/><rect x="110" y="153" width="44" height="10" rx="5" fill="#f6c66a"/>
+      </svg>
+    </div>
   </section>
 
-  <section class="card" id="tasa">
-    <div class="tag">La regla del juego</div><h2>El 12 %: un sol hoy vale más que un sol mañana</h2>
-    <p>Si el dueño no invierte en la red, podría dejar esa plata en otra cosa que le rinda. El proyecto usa un <b>12 % al año</b> como lo mínimo que esa plata debería ganar.</p>
-    <p class="pan">si hoy te dan S/ 100 o te prometen S/ 100 dentro de un año, eliges hoy. Con el 12 %, esos <span class="n">S/ 100</span> del próximo año valen hoy unos <span class="n">S/ 89</span>. A eso se le llama <b>descontar</b>.</p>
+  <section class="ch" id="cuentas">
+    <header><div class="ico">🧾</div><div><div class="k">Capítulo 1</div><h2>Las cuatro cuentas del horno</h2></div></header>
+    <div class="tiles">
+      <div class="tile"><div class="e">🔥</div><b class="cnt" data-to="12824" data-pre="US$ ">US$ 12,824</b><span>Inversión: se paga <b>una sola vez</b></span></div>
+      <div class="tile"><div class="e">💡</div><b class="cnt" data-to="211" data-pre="US$ ">US$ 211</b><span>Operación: se paga <b>cada mes</b></span></div>
+      <div class="tile"><div class="e">🥖</div><b class="cnt" data-to="8864" data-pre="US$ ">US$ 8,864</b><span>Beneficio: lo que ayuda a ganar <b>al año</b></span></div>
+      <div class="tile"><div class="e">📅</div><b class="cnt" data-to="5" data-suf=" años">5 años</b><span>Tiempo para medir si conviene</span></div>
+    </div>
+    <p class="pan"><span>Comprar el horno es la <b>inversión</b>. La luz y el gas de cada mes son la <b>operación</b>. El pan que ya no se bota y las ventas que ya no se pierden son el <b>beneficio</b>.</span></p>
+    <p>¿De dónde salen esos US$ 8,864 al año? De cinco ahorros: menos pan botado (US$ 3,445), más ventas porque el pan ya no se agota (US$ 2,105), compras más baratas (US$ 1,313), menos faltantes de caja (US$ 957) y menos horas cuadrando cuentas (US$ 1,044). El primer año se cuenta solo el 60 %, porque el personal recién está aprendiendo.</p>
   </section>
 
-  <section class="card" id="van">
-    <div class="tag">El número más importante</div><h2>VAN: lo que te queda en el bolsillo</h2>
-    <p>El <b>VAN (Valor Actual Neto)</b> suma todo lo que la red hace ganar en 5 años, en plata de hoy, y le resta todo lo que cuesta. Es lo que <b>sobra después de recuperar la inversión y de ganar el 12 %</b>.</p>
-    <div class="big"><div><b>US$ 7,185</b><span>VAN de la fase 1 (escenario medio)</span></div></div>
-    <p class="pan">pones US$ 12,824 en el horno. En 5 años te devuelve lo que pusiste, más el 12 % anual que te habría dado otra inversión, y encima te sobran <b>US$ 7,185</b> de hoy. Ese sobrante es el VAN.</p>
-    <div class="ok"><span class="rule">VAN positivo → conviene.</span> VAN cero → solo empatas con el 12 %. VAN negativo → mejor no hacerlo.</div>
+  <section class="ch" id="tasa">
+    <header><div class="ico">⏳</div><div><div class="k">Capítulo 2</div><h2>El 12 %: un sol de hoy vale más que un sol de mañana</h2></div></header>
+    <p class="lead">Si la plata no se mete al horno, podría estar ganando en otro lado. El proyecto exige que rinda <b>al menos 12 % al año</b>. Por eso la plata que llega en el futuro se "encoge" cuando la traemos a hoy.</p>
+    <label for="yr">Mueve la barra: ¿cuántos años tengo que esperar mis S/ 100? <b id="yrv" class="n">3 años</b></label>
+    <input id="yr" type="range" min="0" max="5" step="1" value="3">
+    <div class="coins" id="coins" aria-hidden="true"></div>
+    <p id="yrtxt" class="pan" aria-live="polite"></p>
   </section>
 
-  <section class="card" id="tir">
-    <div class="tag">La rentabilidad</div><h2>TIR: el "interés" que paga el proyecto</h2>
-    <p>La <b>TIR (Tasa Interna de Retorno)</b> dice cuánto rinde la plata invertida, como si fuera un interés anual.</p>
-    <div class="big"><div><b>30.1 %</b><span>TIR de la fase 1</span></div><div><b>12 %</b><span>Lo mínimo que se exige</span></div></div>
-    <p class="pan">es como si una caja de ahorro te pagara 30 % al año por tu plata, cuando lo normal es 12 %. Por eso conviene.</p>
-    <div class="ok"><span class="rule">TIR mayor que 12 % → conviene.</span> Mientras más alta, mejor. Si la TIR fuera 10 %, rendiría menos de lo exigido.</div>
-  </section>
-
-  <section class="card" id="recuperacion">
-    <div class="tag">El tiempo</div><h2>Recuperación: ¿en cuánto tiempo vuelve la plata?</h2>
-    <div class="big"><div><b>31 meses</b><span>Recuperación simple</span></div><div><b>38 meses</b><span>Recuperación descontada al 12 %</span></div></div>
-    <p class="pan">el horno costó lo mismo que unos 12 días de venta de toda la panadería. Con lo que ahorra, en unos <b>2 años y medio</b> ya se pagó solo. Si cuentas que la plata futura vale un poco menos (el 12 %), son unos 3 años.</p>
-  </section>
-
-  <section class="card" id="bc">
-    <div class="tag">Por cada sol</div><h2>Beneficio/costo: cuánto vuelve por cada sol</h2>
-    <div class="big"><div><b>1.33</b><span>Relación beneficio/costo (escenario medio)</span></div></div>
-    <p class="pan">por cada S/ 1.00 que pones, vuelven <b>S/ 1.33</b> en plata de hoy.</p>
-    <div class="ok"><span class="rule">Mayor que 1 → conviene.</span> Menor que 1 → pierdes plata.</div>
-  </section>
-
-  <section class="card" id="equilibrio">
-    <div class="tag">¿Y si vendemos menos?</div><h2>Punto de equilibrio y escenarios</h2>
-    <p>Las ventas que dio el negocio son aproximadas, por eso se calcularon tres escenarios: <b>conservador</b> (cada sucursal vende S/ 700 al día), <b>medio</b> (S/ 850) y <b>alto</b> (S/ 1,000).</p>
-    <div class="tbl"><table>
-      <thead><tr><th>Escenario</th><th class="r">Beneficio al año</th><th class="r">VAN</th><th class="r">TIR</th><th>¿Conviene?</th></tr></thead>
-      <tbody>
-        <tr><td>Conservador</td><td class="r n">US$ 7,900</td><td class="r n">US$ 4,055</td><td class="r n">22.6 %</td><td>Sí</td></tr>
-        <tr><td>Medio</td><td class="r n">US$ 8,864</td><td class="r n">US$ 7,185</td><td class="r n">30.1 %</td><td>Sí</td></tr>
-        <tr><td>Alto</td><td class="r n">US$ 9,828</td><td class="r n">US$ 10,317</td><td class="r n">37.2 %</td><td>Sí</td></tr>
-      </tbody></table></div>
-    <p>El <b>punto de equilibrio</b> es el beneficio mínimo para que el VAN no sea negativo: <span class="n">US$ 6,652</span> al año, el <b>75 %</b> de lo esperado. Si la red logra menos que eso, ya no conviene.</p>
-    <p class="pan">si el horno ayuda a ganar al menos 3 de cada 4 soles que esperábamos, igual vale la pena.</p>
-
-    <h3 style="margin-top:18px">Pruébalo tú mismo</h3>
-    <div class="sim">
-      <label for="pct">¿Qué parte del beneficio esperado se logra? <b id="pctv" class="n">100 %</b></label>
-      <input id="pct" type="range" min="40" max="130" step="5" value="100" aria-describedby="verdict">
-      <div class="out">
-        <div><b id="simBen">US$ 8,864</b><span>Beneficio al año</span></div>
-        <div><b id="simVan">US$ 7,185</b><span>VAN (12 %)</span></div>
-        <div><b id="simTir">30.1 %</b><span>TIR</span></div>
+  <section class="ch" id="van">
+    <header><div class="ico">⚖️</div><div><div class="k">Capítulo 3</div><h2>VAN: la balanza del horno</h2></div></header>
+    <p class="lead">En un platillo va todo lo que <b>entra</b> en 5 años; en el otro, todo lo que <b>sale</b>, las dos cosas en plata de hoy (ya "encogida" con el 12 %). Lo que sobra es el <b>VAN (Valor Actual Neto)</b>. Prueba con los tres escenarios de venta:</p>
+    <div class="seg" role="group" aria-label="Escenario de ventas" id="vanSeg"><button data-s="c">Vendemos poco</button><button data-s="m" class="on">Normal</button><button data-s="a">Vendemos mucho</button></div>
+    <div class="scale" aria-hidden="true">
+      <div class="post"></div><div class="base"></div>
+      <div class="beam" id="beam">
+        <div class="plate pl"><b id="pvIn">US$ 29,193</b><small>Lo que entra</small><div class="pile" id="pileIn">🥖🥖🥖</div><div class="dish"></div></div>
+        <div class="plate pr"><b>US$ 22,008</b><small>Lo que sale</small><div class="pile">🔥💡</div><div class="dish"></div></div>
       </div>
-      <div id="verdict" class="verdict ok" role="status">Conviene: queda plata después de recuperar todo.</div>
+    </div>
+    <div class="verdict v-ok" id="vanOut" role="status">VAN = US$ 7,185. Entra más de lo que sale: conviene.</div>
+    <p class="pan"><span>Pones US$ 12,824 en el horno. En 5 años te devuelve todo, más el 12 % que te habría dado otra inversión, y encima te sobran <b>US$ 7,185</b> de hoy. Ese sobrante es el VAN.</span></p>
+    <div class="rule"><span class="r-ok">VAN positivo → conviene</span><span class="r-mid">VAN cero → empatas</span><span class="r-no">VAN negativo → no conviene</span></div>
+  </section>
+
+  <section class="ch" id="tir">
+    <header><div class="ico">🏁</div><div><div class="k">Capítulo 4</div><h2>TIR: la carrera de los S/ 1,000</h2></div></header>
+    <p class="lead">La <b>TIR (Tasa Interna de Retorno)</b> es el "interés" que paga el horno. Pongamos S/ 1,000 a correr 5 años: unos en una cuenta al 12 % y otros en la red.</p>
+    <div class="race">
+      <div class="lane"><span>🏦 Banco 12 %</span><div class="track"><div class="runner" id="r1" style="background:color-mix(in srgb,var(--muted) 35%,transparent)">🐢</div></div><b class="n" id="r1v">S/ 1,000</b></div>
+      <div class="lane"><span>🥖 Red 30.1 %</span><div class="track"><div class="runner" id="r2" style="background:color-mix(in srgb,var(--wheat) 45%,transparent)">🐇</div></div><b class="n" id="r2v">S/ 1,000</b></div>
+    </div>
+    <button class="btn" id="go">¡Que corran 5 años!</button>
+    <p class="pan"><span>Es como una caja de ahorro que te paga <b>30.1 % al año</b>, cuando lo mínimo que se exige es 12 %. En 5 años tus S/ 1,000 se vuelven unos <b>S/ 3,727</b>, contra S/ 1,762 del banco.</span></p>
+    <div class="rule"><span class="r-ok">TIR mayor que 12 % → conviene</span><span class="r-no">TIR menor que 12 % → no conviene</span></div>
+  </section>
+
+  <section class="ch" id="recuperacion">
+    <header><div class="ico">🐷</div><div><div class="k">Capítulo 5</div><h2>Recuperación: la alcancía del horno</h2></div></header>
+    <p class="lead">Cada mes, lo que el horno ayuda a ganar (menos lo que gasta) cae en una alcancía. ¿Cuándo se llena con los US$ 12,824 que costó?</p>
+    <div class="jarbox">
+      <div class="jar" aria-hidden="true"><div class="fill" id="fill"></div><div class="pct" id="jarPct">0 %</div></div>
+      <div>
+        <label for="mo">Meses desde que se instala: <b id="mov" class="n">12</b></label>
+        <input id="mo" type="range" min="0" max="48" step="1" value="12">
+        <div class="out"><div><b id="moAcc">US$ 2,786</b><span>Juntado en la alcancía</span></div><div><b id="moFalta">US$ 10,038</b><span>Falta para pagar el horno</span></div></div>
+        <div class="verdict" id="moMsg" role="status"></div>
+      </div>
+    </div>
+    <p class="pan"><span>En unos <b>31 meses</b> (2 años y medio) el horno ya se pagó solo. Si cuentas que la plata futura vale un poco menos (el 12 %), son unos <b>38 meses</b>.</span></p>
+  </section>
+
+  <section class="ch" id="bc">
+    <header><div class="ico">🪙</div><div><div class="k">Capítulo 6</div><h2>Beneficio/costo: ¿cuánto vuelve por cada sol?</h2></div></header>
+    <div class="seg" role="group" aria-label="Escenario" id="bcSeg"><button data-s="c">Vendemos poco</button><button data-s="m" class="on">Normal</button><button data-s="a">Vendemos mucho</button></div>
+    <div class="bc"><div class="side">🪙</div><span aria-hidden="true">➜</span><div class="side" id="bcCoins" aria-hidden="true"></div><b class="n" id="bcVal">× 1.33</b></div>
+    <p class="pan" id="bcTxt"></p>
+    <div class="rule"><span class="r-ok">Mayor que 1 → ganas</span><span class="r-no">Menor que 1 → pierdes</span></div>
+  </section>
+
+  <section class="ch" id="equilibrio">
+    <header><div class="ico">🚦</div><div><div class="k">Capítulo 7</div><h2>Punto de equilibrio: ¿y si vendemos menos de lo pensado?</h2></div></header>
+    <p class="lead">Las ventas que dio el dueño son aproximadas. Entonces: ¿hasta dónde pueden bajar los beneficios y que el horno <b>siga conviniendo</b>? Arrastra la barra.</p>
+    <label for="pct">Logramos <b id="pctv" class="n">100 %</b> del beneficio esperado</label>
+    <input id="pct" type="range" min="40" max="130" step="5" value="100">
+    <div class="gauge" aria-hidden="true"><div class="needle" id="needle"></div><span class="be" style="left:38.9%">equilibrio: 75 %</span></div>
+    <div class="out" style="margin-top:30px"><div><b id="simBen">US$ 8,864</b><span>Beneficio al año</span></div><div><b id="simVan">US$ 7,185</b><span>VAN</span></div><div><b id="simTir">30.1 %</b><span>TIR</span></div></div>
+    <div id="verdict" class="verdict v-ok" role="status"></div>
+    <p class="pan"><span>Si el horno ayuda a ganar aunque sea <b>3 de cada 4 soles</b> que esperábamos (US$ 6,652 al año), igual vale la pena. Ese es el <b>punto de equilibrio: 75 %</b>.</span></p>
+  </section>
+
+  <section class="ch" id="programa">
+    <header><div class="ico">🗺️</div><div><div class="k">Capítulo 8</div><h2>¿"VAN fase 1" o "VAN programa"?</h2></div></header>
+    <p class="lead">Son dos preguntas distintas. Cambia el interruptor y mira crecer la panadería.</p>
+    <div class="seg" role="group" aria-label="Alcance" id="prSeg"><button data-s="f" class="on">Solo fase 1</button><button data-s="p">Programa completo</button></div>
+    <div class="mapdots" id="dots" aria-hidden="true"></div>
+    <div class="out"><div><b id="prSedes">4 sedes</b><span id="prYears">2027 · se mide hasta 2031</span></div><div><b id="prInv">US$ 12,824</b><span>Inversión</span></div><div><b id="prVan">US$ 7,185</b><span>VAN</span></div><div><b id="prTir">30.1 %</b><span>TIR</span></div></div>
+    <p class="pan" id="prTxt"></p>
+    <p>El programa rinde más porque cada tienda nueva reutiliza el diseño, el hub en la nube y el sistema que ya se pagaron en la fase 1. Pero la decisión que se presenta al dueño es la <b>fase 1: US$ 12,824</b>, debajo del tope de US$ 13,000.</p>
+  </section>
+
+  <section class="ch" id="pro">
+    <header><div class="ico">🥊</div><div><div class="k">Capítulo 9</div><h2>Básico contra pro: voltea las cartas</h2></div></header>
+    <p class="lead">El <b>pro</b> es un horno de lujo: equipos más robustos, 4G en todas las sedes, cámaras IP y control biométrico. ¿Le conviene a esta panadería?</p>
+    <div class="flips">
+      <button class="flip" aria-label="Voltear la carta de la versión básica"><div class="in">
+        <div class="face front"><span class="k">Versión básica</span><b class="big">US$ 12,824</b><span>MikroTik + TP-Link Omada</span><span class="hint">👆 Toca para ver si conviene</span></div>
+        <div class="face back" style="background:var(--soft-good)"><span class="k" style="color:var(--good)">✅ Conviene</span><b class="big" style="color:var(--good)">VAN US$ 7,185</b><span>TIR 30.1 % · se paga en 31 meses</span><span class="hint">Es la que se recomienda</span></div>
+      </div></button>
+      <button class="flip" aria-label="Voltear la carta de la versión pro"><div class="in">
+        <div class="face front"><span class="k">Versión pro</span><b class="big">US$ 19,117</b><span>Equipos de grado empresarial</span><span class="hint">👆 Toca para ver si conviene</span></div>
+        <div class="face back" style="background:var(--soft-bad)"><span class="k" style="color:var(--bad)">❌ No se paga en 5 años</span><b class="big" style="color:var(--bad)">VAN US$ −867</b><span>TIR 10.4 %: menos que el 12 % exigido</span><span class="hint">Mejor horno, pero esta panadería todavía no vende lo suficiente para pagarlo</span></div>
+      </div></button>
     </div>
   </section>
 
-  <section class="card" id="programa">
-    <div class="tag">Dos miradas</div><h2>"VAN fase 1" o "VAN programa": ¿cuál es la diferencia?</h2>
-    <p>La página muestra dos VAN y dos TIR porque mide dos cosas distintas:</p>
-    <div class="tbl"><table>
-      <thead><tr><th></th><th>Fase 1</th><th>Programa completo</th></tr></thead>
-      <tbody>
-        <tr><td>Qué incluye</td><td>Solo las 4 sedes de Huánuco (2027)</td><td>Las 3 fases: 10 sedes (2027 a 2030)</td></tr>
-        <tr><td>Se mide hasta</td><td>5 años (2031)</td><td>2034</td></tr>
-        <tr><td>Inversión</td><td class="n">US$ 12,824</td><td class="n">US$ 33,983</td></tr>
-        <tr><td>VAN</td><td class="n">US$ 7,185</td><td class="n">US$ 28,621</td></tr>
-        <tr><td>TIR</td><td class="n">30.1 %</td><td class="n">36.9 %</td></tr>
-      </tbody></table></div>
-    <p class="pan">el <b>VAN de la fase 1</b> responde "¿conviene comprar el primer horno?". El <b>VAN del programa</b> responde "¿conviene el plan entero de abrir más panaderías con su horno?". El programa rinde más porque cada tienda nueva reutiliza el diseño, el hub y el sistema que ya se pagaron en la fase 1.</p>
-    <p>Para la monografía, la decisión del dueño es la <b>fase 1</b> (US$ 12,824, debajo del tope de US$ 13,000). El programa sirve para mostrar que crecer también conviene.</p>
-  </section>
-
-  <section class="card" id="pro">
-    <div class="tag">Dos presupuestos</div><h2>Versión básica o pro</h2>
-    <p>La <b>básica</b> usa equipos MikroTik y TP-Link Omada a buen precio. La <b>pro</b> usa equipos más caros y robustos: doble fuente, 4G en todas las sedes, cámaras IP y control biométrico.</p>
-    <div class="tbl"><table>
-      <thead><tr><th></th><th class="r">Básica</th><th class="r">Pro</th></tr></thead>
-      <tbody>
-        <tr><td>Inversión fase 1</td><td class="r n">US$ 12,824</td><td class="r n">US$ 19,117</td></tr>
-        <tr><td>VAN fase 1</td><td class="r n">US$ 7,185</td><td class="r n" style="color:var(--bad)">US$ −867</td></tr>
-        <tr><td>VAN programa</td><td class="r n">US$ 28,621</td><td class="r n">US$ 11,837</td></tr>
-      </tbody></table></div>
-    <p class="pan">el horno pro es mejor, pero con lo que vende esta panadería no alcanza a pagarse en 5 años. Por eso se recomienda la básica.</p>
-  </section>
-
-  <section class="card" id="cisco">
-    <div class="tag">Pregunta frecuente</div><h2>¿Qué es la "referencia Cisco"? ¿Es necesaria?</h2>
-    <p>La simulación se hace en <b>Cisco Packet Tracer</b>, y ese programa solo trae equipos Cisco (router 2911, switch 2960). Pero en la vida real <b>no se compra nada de Cisco</b>: se compran MikroTik y TP-Link Omada, que hacen lo mismo y cuestan mucho menos.</p>
-    <p>La "referencia Cisco" responde a una sola pregunta: <i>"¿y si hubiéramos comprado los mismos equipos de la simulación?"</i></p>
-    <div class="bars" aria-label="Costo de la fase 1 por marca">
-      <div class="bar"><span>Básica (se compra)</span><i style="width:49.7%;background:var(--basic)"></i><b class="n">US$ 12,824</b></div>
-      <div class="bar"><span>Pro</span><i style="width:74.1%;background:var(--pro)"></i><b class="n">US$ 19,117</b></div>
-      <div class="bar"><span>Todo Cisco (solo referencia)</span><i style="width:100%;background:var(--muted)"></i><b class="n">US$ 25,800</b></div>
+  <section class="ch" id="cisco">
+    <header><div class="ico">🎮</div><div><div class="k">Capítulo 10</div><h2>¿Y la "referencia Cisco"?</h2></div></header>
+    <p class="lead">La simulación se hace en <b>Cisco Packet Tracer</b>, y ese programa solo trae equipos Cisco. Pero en la vida real <b>no se compra nada de Cisco</b>: se compran MikroTik y TP-Link Omada, que hacen el mismo trabajo.</p>
+    <div class="bars" id="cbars">
+      <div class="bar"><span>✅ Básica (se compra)</span><i data-w="49.7" style="background:var(--basic)"></i><b class="n">US$ 12,824</b></div>
+      <div class="bar"><span>Pro</span><i data-w="74.1" style="background:var(--pro)"></i><b class="n">US$ 19,117</b></div>
+      <div class="bar"><span>🎮 Todo Cisco (referencia)</span><i data-w="100" style="background:var(--muted)"></i><b class="n">US$ 25,800</b></div>
     </div>
-    <p class="pan">en el simulador practicas con un horno de marca famosa porque es el único que trae, pero en la tienda compras uno que hornea igual y cuesta la mitad.</p>
-    <div class="ok"><span class="rule">¿Es necesaria?</span> Para comprar, <b>no</b>: nunca se compra. Para la monografía sí sirve, porque justifica ante el docente por qué la simulación usa Cisco y la red real no: Cisco costaría unas <b>dos veces más</b>. Si prefieren simplificar, se puede quitar sin cambiar el presupuesto.</div>
+    <p class="pan"><span>En el videojuego practicas con un horno de marca famosa porque es el único que trae. En la tienda compras uno que hornea igual y cuesta <b>la mitad</b>.</span></p>
+    <p><b>¿Es necesaria?</b> Para comprar, no. Para la monografía sí ayuda: le muestra al docente por qué la simulación usa Cisco y la red real no, porque Cisco costaría unas <b>dos veces más</b>.</p>
   </section>
 
-  <section class="card">
-    <div class="tag">Otras palabras</div><h2>Mini glosario</h2>
-    <div class="tbl"><table><tbody>
-      <tr><td><b>Valor de rescate</b></td><td>Lo que todavía valen los equipos a los 5 años (se toma el 10 %: US$ 717). Como vender el horno usado.</td></tr>
-      <tr><td><b>Crédito fiscal del IGV</b></td><td>El IGV de lo comprado con factura se descuenta del IGV que el negocio paga a SUNAT. Recupera unos US$ 1,589 y la inversión real baja a US$ 11,235.</td></tr>
-      <tr><td><b>Capacidad de pago</b></td><td>Si se pide un crédito a 36 meses (25 % anual), la cuota es de US$ 493 al mes. El primer año el dueño pone unos US$ 261 al mes; desde el segundo año la red ya paga sola su cuota.</td></tr>
-      <tr><td><b>Contingencia</b></td><td>10 % extra por si algo sube de precio o falta algún material.</td></tr>
-      <tr><td><b>Etapa A y B</b></td><td>Si se quiere gastar menos al inicio: primero la red y la caja (US$ 11,027) y luego las cámaras y los sensores (US$ 1,797).</td></tr>
-    </tbody></table></div>
+  <section class="ch" id="quiz">
+    <header><div class="ico">🧠</div><div><div class="k">Para terminar</div><h2>Ponte a prueba</h2></div></header>
+    <div id="qs"></div>
+    <p class="score" id="score" aria-live="polite"></p>
   </section>
 
-  <p class="foot">Universidad de Huánuco · Redes y Telecomunicaciones I · 2026. Cifras de la versión básica, tasa de 12 %, 5 años y tipo de cambio S/ 3.433. <a href="./">Volver al presupuesto</a>.</p>
+  <section class="ch">
+    <header><div class="ico">📖</div><div><div class="k">Extra</div><h2>Otras palabras del presupuesto</h2></div></header>
+    <details><summary>Contingencia</summary><p>Un 10 % extra por si algo sube de precio o falta material. Como comprar un saco de harina de más "por si acaso".</p></details>
+    <details><summary>Valor de rescate</summary><p>Lo que todavía valen los equipos a los 5 años (se toma el 10 %: US$ 717). Como vender el horno usado.</p></details>
+    <details><summary>Crédito fiscal del IGV</summary><p>El IGV de lo comprado con factura se descuenta del IGV que el negocio paga a SUNAT. Se recuperan unos US$ 1,589, así que la inversión real baja a US$ 11,235.</p></details>
+    <details><summary>Capacidad de pago</summary><p>Con un crédito a 36 meses (25 % al año), la cuota es de US$ 493 al mes. El primer año el dueño pone unos US$ 261 al mes de su bolsillo; desde el segundo año la red ya paga sola su cuota.</p></details>
+    <details><summary>Etapa A y Etapa B</summary><p>Si se quiere gastar menos al inicio: primero la red y la caja (US$ 11,027) y unos meses después las cámaras y los sensores (US$ 1,797).</p></details>
+  </section>
+
+  <p class="foot">Universidad de Huánuco · Redes y Telecomunicaciones I · 2026. Cifras de la versión básica, escenario normal, tasa de 12 % y 5 años. <a href="./#comparacion">Volver al presupuesto</a>.</p>
 </main>
+
 <script>
 (function(){
-  var INV=12824, OP=211*12, BAT=80, SALV=717, B0=8864;
-  function flows(B){var f=[-INV];for(var t=1;t<=5;t++){f.push((t===1?0.6:1)*B-OP-(t===3?BAT:0)+(t===5?SALV:0))}return f}
+  var $=function(id){return document.getElementById(id)};
+  var fmt=function(n,c){var s=Math.round(n);return (s<0?"−":"")+(c||"US$ ")+Math.abs(s).toLocaleString("en-US")};
+  var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* aparecer al hacer scroll, contadores, menú activo y barra de progreso */
+  var chs=[].slice.call(document.querySelectorAll(".ch"));
+  function show(c){c.classList.add("in");c.querySelectorAll(".cnt").forEach(count);if(c.id==="cisco")growBars()}
+  if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)show(e.target)})},{threshold:.12});chs.forEach(function(c){io.observe(c)})}else chs.forEach(show);
+  function count(el){if(el.dataset.done||reduce)return;el.dataset.done=1;var to=+el.dataset.to,pre=el.dataset.pre||"",suf=el.dataset.suf||"",t0=null;
+    function step(t){t0=t0||t;var k=Math.min(1,(t-t0)/1100),v=to*(1-Math.pow(1-k,3));el.textContent=pre+Math.round(v).toLocaleString("en-US")+suf;if(k<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
+  var links=[].slice.call(document.querySelectorAll("#toc a"));
+  function onScroll(){var h=document.documentElement,p=h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight);$("prog").style.width=(p*100)+"%";
+    var cur=null;chs.forEach(function(c){if(c.id&&c.getBoundingClientRect().top<170)cur=c.id});
+    links.forEach(function(a){var on=a.getAttribute("href")==="#"+cur;if(on&&!a.classList.contains("on")){var ul=$("toc");ul.scrollTo({left:a.offsetLeft-ul.clientWidth/2+a.clientWidth/2,behavior:"smooth"})}a.classList.toggle("on",on)})}
+  addEventListener("scroll",onScroll,{passive:true});onScroll();
+  if(location.hash){var t=document.querySelector(location.hash);if(t)show(t)}
+
+  /* botones de opciones */
+  function segs(id,fn){var s=$(id);s.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+    s.querySelectorAll("button").forEach(function(x){x.classList.toggle("on",x===b)});fn(b.dataset.s)})}
+
+  /* 2. monedas que se encogen */
+  function coins(){var n=+$("yr").value;$("yrv").textContent=n+(n===1?" año":" años");var h="";
+    for(var y=0;y<=5;y++){var v=100/Math.pow(1.12,y),s=Math.round(40+60*v/100);
+      h+='<figure style="opacity:'+(y<=n?1:.25)+'"><div class="coin" style="width:'+s+'px;height:'+s+'px">'+Math.round(v)+'</div><figcaption>'+(y===0?"hoy":"año "+y)+'</figcaption></figure>'}
+    $("coins").innerHTML=h;var v=100/Math.pow(1.12,n);
+    $("yrtxt").innerHTML=n===0?"<span>Los S/ 100 que tienes hoy valen… S/ 100. Nada que encoger.</span>":"<span>Si te prometen <b>S/ 100 dentro de "+n+(n===1?" año":" años")+"</b>, hoy valen solo <b>S/ "+Math.round(v)+"</b>. Por eso, entre recibirlos hoy o después, siempre conviene hoy.</span>"}
+  $("yr").addEventListener("input",coins);coins();
+
+  /* 3. balanza del VAN */
+  var SC={c:{van:4055,bc:1.18},m:{van:7185,bc:1.33},a:{van:10317,bc:1.47}}, OUT=22008;
+  function balance(k){var x=SC[k];$("pvIn").textContent=fmt(OUT+x.van);
+    $("pileIn").textContent=k==="c"?"🥖🥖":k==="m"?"🥖🥖🥖":"🥖🥖🥖🥖";
+    $("beam").style.transform="rotate("+(-Math.min(12,x.van/900)).toFixed(1)+"deg)";
+    $("vanOut").textContent="VAN = "+fmt(x.van)+". Entra más de lo que sale: conviene."}
+  segs("vanSeg",balance);$("beam").style.transform="rotate(0deg)";setTimeout(function(){balance("m")},400);
+
+  /* 4. carrera */
+  $("go").addEventListener("click",function(){var a=1000*Math.pow(1.12,5),b=1000*Math.pow(1.301,5);
+    $("r1").style.transition="none";$("r2").style.transition="none";$("r1").style.width="0";$("r2").style.width="0";
+    void $("r1").offsetWidth;$("r1").style.transition="";$("r2").style.transition="";
+    $("r1").style.width=(a/b*100)+"%";$("r2").style.width="100%";
+    var t0=null;function step(t){t0=t0||t;var k=Math.min(1,(t-t0)/2200),e=1-Math.pow(1-k,3);$("r1v").textContent=fmt(1000+(a-1000)*e,"S/ ");$("r2v").textContent=fmt(1000+(b-1000)*e,"S/ ");if(k<1)requestAnimationFrame(step)}requestAnimationFrame(step);
+    $("go").textContent="Otra vez 🔁"});
+
+  /* 5. alcancía */
+  var NET=[2786,6332,6252,6332,7049], INV=12824;
+  function acc(m){var s=0;for(var i=0;i<m;i++)s+=NET[Math.floor(i/12)]/12;return s}
+  function jar(){var m=+$("mo").value,a=acc(m),p=Math.min(1,a/INV);$("mov").textContent=m+(m===1?" mes":" meses");
+    $("fill").style.height=(p*100)+"%";$("fill").classList.toggle("done",a>=INV);$("jarPct").textContent=Math.floor(p*100)+" %";
+    $("moAcc").textContent=fmt(a);$("moFalta").textContent=a>=INV?"US$ 0 🎉":fmt(INV-a);
+    var msg=$("moMsg");
+    if(a>=INV){msg.className="verdict v-ok";msg.style.background="";msg.textContent="🎉 ¡Horno pagado! Desde aquí todo lo que entra es ganancia."}
+    else if(p>.9){msg.className="verdict";msg.style.background="var(--soft-wheat)";msg.textContent="¡Ya casi! Falta muy poquito."}
+    else{msg.className="verdict";msg.style.background="var(--chip)";msg.textContent=m===0?"Recién instalado: la alcancía está vacía.":"Todavía juntando… sigue moviendo la barra."}}
+  $("mo").addEventListener("input",jar);jar();
+
+  /* 6. beneficio/costo */
+  function bc(k){var x=SC[k].bc,full=Math.floor(x),frac=x-full,h="";
+    for(var i=0;i<full;i++)h+='<span class="pop" style="animation-delay:'+(i*.12)+'s">🪙</span>';
+    h+='<span class="pop" style="width:'+Math.round(frac*36)+'px;overflow:hidden;animation-delay:'+(full*.12)+'s">🪙</span>';
+    $("bcCoins").innerHTML=h;$("bcVal").textContent="× "+x.toFixed(2);
+    $("bcTxt").innerHTML="<span>Por cada <b>S/ 1.00</b> que pones en el horno, vuelven <b>S/ "+x.toFixed(2)+"</b> en plata de hoy: el sol que pusiste y "+Math.round((x-1)*100)+" céntimos más.</span>"}
+  segs("bcSeg",bc);bc("m");
+
+  /* 7. equilibrio */
+  var PVB=28787;
+  function flows(B){var f=[-INV];for(var t=1;t<=5;t++)f.push((t===1?.6:1)*B-2532-(t===3?80:0)+(t===5?717:0));return f}
   function npv(r,f){return f.reduce(function(a,c,t){return a+c/Math.pow(1+r,t)},0)}
-  function irr(f){var lo=-0.99,hi=3;if(npv(lo+0.0001,f)<0)return null;for(var i=0;i<120;i++){var m=(lo+hi)/2;if(npv(m,f)>0)lo=m;else hi=m}return lo}
-  var fmt=function(n){return "US$ "+Math.round(n).toLocaleString("en-US")};
-  var el=function(id){return document.getElementById(id)};
-  function upd(){
-    var p=+el("pct").value, B=B0*p/100, f=flows(B), v=npv(0.12,f), r=irr(f);
-    el("pctv").textContent=p+" %"; el("simBen").textContent=fmt(B); el("simVan").textContent=p===100?"US$ 7,185":fmt(v);
-    el("simTir").textContent=r===null?"—":(r*100).toFixed(1)+" %";
-    var d=el("verdict");
-    if(v>=0){d.className="verdict ok";d.textContent="Conviene: queda plata después de recuperar todo y ganar el 12 %."}
-    else{d.className="verdict no";d.textContent="No conviene: con este beneficio la red no alcanza a pagarse en 5 años."}
-  }
-  el("pct").addEventListener("input",upd); upd();
+  function irr(f){var lo=-.99,hi=3;if(npv(lo+.001,f)<0)return null;for(var i=0;i<100;i++){var m=(lo+hi)/2;npv(m,f)>0?lo=m:hi=m}return lo}
+  function eq(){var p=+$("pct").value,B=8864*p/100,v=7185+(p/100-1)*PVB,r=irr(flows(B));
+    $("pctv").textContent=p+" %";$("simBen").textContent=fmt(B);$("simVan").textContent=fmt(v);$("simTir").textContent=p===100?"30.1 %":(r===null?"—":(r*100).toFixed(1)+" %");
+    $("needle").style.left=((p-40)/90*100)+"%";var d=$("verdict");
+    if(v>=0){d.className="verdict v-ok";d.textContent=p>=100?"🟢 Conviene, y con margen.":p>=80?"🟢 Todavía conviene: estamos sobre el 75 %.":"🟡 Conviene, pero muy justo."}
+    else{d.className="verdict v-no";d.textContent="🔴 Ya no conviene: con este beneficio el horno no se paga en 5 años."}}
+  $("pct").addEventListener("input",eq);eq();
+
+  /* 8. fase 1 o programa */
+  var PR={f:{n:4,y:"2027 · se mide hasta 2031",inv:12824,van:7185,tir:"30.1 %",t:'<span>La <b>fase 1</b> responde: "¿conviene comprar el primer horno para las 4 sedes de Huánuco?". Una planta 🏭 y tres tiendas 🏪.</span>'},
+          p:{n:10,y:"2027–2030 · se mide hasta 2034",inv:33983,van:28621,tir:"36.9 %",t:'<span>El <b>programa</b> responde: "¿conviene el plan entero de llegar a 10 sedes en Huánuco, Tingo María, Cerro de Pasco y Huancayo?". Se suman tiendas, dos con horno propio 🥖 y una segunda planta 🏭.</span>'}};
+  var ICONS=["🏭","🏪","🏪","🏪","🏪","🏪","🥖","🥖","🏭","🏪"];
+  $("dots").innerHTML=ICONS.map(function(e,i){return '<div class="dot'+(i>=4?' off':'')+'">'+e+'</div>'}).join("");
+  function prog(k){var x=PR[k];[].forEach.call($("dots").children,function(d,i){setTimeout(function(){d.classList.toggle("off",i>=x.n)},Math.max(0,i-4)*90)});
+    $("prSedes").textContent=x.n+" sedes";$("prYears").textContent=x.y;$("prInv").textContent=fmt(x.inv);$("prVan").textContent=fmt(x.van);$("prTir").textContent=x.tir;$("prTxt").innerHTML=x.t}
+  segs("prSeg",prog);prog("f");
+
+  /* 9. cartas */
+  document.querySelectorAll(".flip").forEach(function(b){b.addEventListener("click",function(){b.classList.toggle("on")})});
+
+  /* 10. barras */
+  var grown=false;function growBars(){if(grown)return;grown=true;document.querySelectorAll("#cbars i").forEach(function(i,k){setTimeout(function(){i.style.width=i.dataset.w+"%"},k*220)})}
+
+  /* quiz */
+  var Q=[["Un proyecto tiene VAN de US$ −500. ¿Conviene?",["Sí","No"],1,"Un VAN negativo dice que entra menos de lo que sale."],
+         ["La TIR sale 9 % y se exige 12 %. ¿Conviene?",["Sí","No"],1,"Rinde menos que el 12 % exigido: mejor dejar la plata en otro lado."],
+         ["Beneficio/costo de 1.33 significa que por cada S/ 1…",["vuelven S/ 0.33","vuelven S/ 1.33"],1,"Vuelve el sol que pusiste y 33 céntimos más."],
+         ["¿Se compran equipos Cisco para la red real?",["Sí","No"],1,"Cisco solo está en la simulación; se compra MikroTik y TP-Link Omada."],
+         ["Si los beneficios llegan al 80 % de lo esperado, ¿el horno conviene?",["Sí","No"],0,"El punto de equilibrio es 75 %, y 80 % está por encima."]];
+  var ok=0,done=0;
+  $("qs").innerHTML=Q.map(function(q,i){return '<div class="q" data-i="'+i+'"><p>'+(i+1)+'. '+q[0]+'</p><div class="opts">'+q[1].map(function(o,j){return '<button data-j="'+j+'">'+o+'</button>'}).join("")+'</div><div class="fb" aria-live="polite"></div></div>'}).join("");
+  $("qs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var box=b.closest(".q");if(box.dataset.done)return;box.dataset.done=1;
+    var q=Q[+box.dataset.i],right=+b.dataset.j===q[2];b.classList.add(right?"right":"wrong");
+    if(!right)box.querySelectorAll("button")[q[2]].classList.add("right");
+    box.querySelector(".fb").textContent=(right?"✅ ¡Bien! ":"❌ Casi. ")+q[3];done++;if(right)ok++;
+    if(done===Q.length)$("score").textContent=ok===Q.length?"🏆 "+ok+" de "+Q.length+": ¡ya puedes explicarle el proyecto al dueño!":"🥖 "+ok+" de "+Q.length+". Repasa los capítulos y recarga la página para intentarlo otra vez."});
 })();
 </script>
 </body>
